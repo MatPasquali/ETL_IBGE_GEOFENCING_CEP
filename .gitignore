@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Jupyter
+.jupyter/
+
+# Dados brutos (NÃO devem entrar no repo — são GB de download direto do IBGE)
+saida_cnefe_uf/
+BR_setores_CD2022/
+Agregados_por_setores_renda_responsavel_BR_csv/
+
+# SQLite intermediário (gerado pelos notebooks; muito grande, fácil reconstruir)
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# CSVs grandes de output (use os parquets como referência)
+data/**/*.csv
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Outros
+*.log

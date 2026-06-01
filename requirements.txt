@@ -1,0 +1,10 @@
+pandas>=2.0
+pyarrow>=14.0
+geopandas>=0.14
+shapely>=2.0
+matplotlib>=3.7
+folium>=0.15
+branca>=0.7
+plotly>=5.18
+ipython>=8.0
+jupyterlab>=4.0
