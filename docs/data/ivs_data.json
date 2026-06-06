@@ -1,0 +1,471 @@
+{
+  "metricas_gerais": {
+    "total_setores": 102599,
+    "total_municipios": 645,
+    "cobertura_ivs_pct": 100.0,
+    "ivs_medio_sp": 50.0,
+    "correlacao_ivs_renda": -0.61,
+    "correlacao_ivs_densidade": 0.1,
+    "correlacao_ivs_coabitacao": 0.51
+  },
+  "componentes": [
+    {
+      "nome": "Vulnerabilidade Renda",
+      "peso": 0.4,
+      "icone": "💰",
+      "descricao": "Inverso da renda media V06004 em log. Quanto MENOR a renda, MAIOR a vulnerabilidade economica.",
+      "formula": "-log(renda_v06004_final_100)",
+      "justificativa": "Renda e a dimensao mais robusta em indices de pobreza (PNUD, IPEA-IVS, CEPAL). Peso 40% reflete sua importancia.",
+      "correlacao_ivs": 0.61
+    },
+    {
+      "nome": "Densidade Demografica",
+      "peso": 0.25,
+      "icone": "🏘",
+      "descricao": "Moradores por km². Alta densidade indica pressao habitacional, infraestrutura sobrecarregada.",
+      "formula": "log(V06002 / area_km2)",
+      "justificativa": "Correlato direto de pressao habitacional + saneamento. Sub-componente classico do IPEA-IVS.",
+      "correlacao_ivs": 0.1
+    },
+    {
+      "nome": "Tipo Especial do Setor",
+      "peso": 0.2,
+      "icone": "⚠",
+      "descricao": "Score por CD_TIPO: favela=2.0, indigena=1.5, rural comum=0.5, urbano comum=0.0. Tipo especial = vulnerabilidade habitacional.",
+      "formula": "Score categorico por CD_TIPO",
+      "justificativa": "CD_TIPO 2/6 (favela urbano/rural) = aglomerado subnormal = definicao IBGE de habitacao precaria.",
+      "correlacao_ivs": 0.42
+    },
+    {
+      "nome": "Coabitacao Habitacional",
+      "peso": 0.15,
+      "icone": "👨‍👩‍👧‍👦",
+      "descricao": "Moradores por domicilio. Razao > 3.5 indica superlotacao habitacional.",
+      "formula": "V06002 / V06001 (moradores / domicilios)",
+      "justificativa": "Indicador classico de superlotacao habitacional usado pelo IPEA-IVS e PNUD. Peso 15% adequado pra dimensao.",
+      "correlacao_ivs": 0.51
+    }
+  ],
+  "top_municipios_vulneraveis": [
+    {
+      "cod_mun": "3516309",
+      "nm_mun": "Francisco Morato",
+      "setores": 388,
+      "ivs_medio": 80.58,
+      "renda_mediana": 1818.13,
+      "densidade_mediana": 9084.58,
+      "coabitacao_mediana": 2.88,
+      "classe_a_alta": 261,
+      "classe_e_baixa": 6,
+      "pct_classe_a": 67.27,
+      "pct_classe_e": 1.55
+    },
+    {
+      "cod_mun": "3515707",
+      "nm_mun": "Ferraz de Vasconcelos",
+      "setores": 402,
+      "ivs_medio": 77.35,
+      "renda_mediana": 1995.34,
+      "densidade_mediana": 14034.87,
+      "coabitacao_mediana": 2.89,
+      "classe_a_alta": 225,
+      "classe_e_baixa": 8,
+      "pct_classe_a": 55.97,
+      "pct_classe_e": 1.99
+    },
+    {
+      "cod_mun": "3523107",
+      "nm_mun": "Itaquaquecetuba",
+      "setores": 629,
+      "ivs_medio": 76.4,
+      "renda_mediana": 2099.17,
+      "densidade_mediana": 11448.77,
+      "coabitacao_mediana": 3.02,
+      "classe_a_alta": 341,
+      "classe_e_baixa": 17,
+      "pct_classe_a": 54.21,
+      "pct_classe_e": 2.7
+    },
+    {
+      "cod_mun": "3522505",
+      "nm_mun": "Itapevi",
+      "setores": 315,
+      "ivs_medio": 73.62,
+      "renda_mediana": 1987.6,
+      "densidade_mediana": 12894.85,
+      "coabitacao_mediana": 2.84,
+      "classe_a_alta": 153,
+      "classe_e_baixa": 9,
+      "pct_classe_a": 48.57,
+      "pct_classe_e": 2.86
+    },
+    {
+      "cod_mun": "3540754",
+      "nm_mun": "Potim",
+      "setores": 36,
+      "ivs_medio": 72.85,
+      "renda_mediana": 1842.84,
+      "densidade_mediana": 7043.66,
+      "coabitacao_mediana": 3.0,
+      "classe_a_alta": 20,
+      "classe_e_baixa": 3,
+      "pct_classe_a": 55.56,
+      "pct_classe_e": 8.33
+    },
+    {
+      "cod_mun": "3513801",
+      "nm_mun": "Diadema",
+      "setores": 777,
+      "ivs_medio": 72.56,
+      "renda_mediana": 2150.45,
+      "densidade_mediana": 25409.0,
+      "coabitacao_mediana": 2.71,
+      "classe_a_alta": 355,
+      "classe_e_baixa": 20,
+      "pct_classe_a": 45.69,
+      "pct_classe_e": 2.57
+    },
+    {
+      "cod_mun": "3515004",
+      "nm_mun": "Embu das Artes",
+      "setores": 638,
+      "ivs_medio": 71.06,
+      "renda_mediana": 2026.73,
+      "densidade_mediana": 15222.47,
+      "coabitacao_mediana": 2.83,
+      "classe_a_alta": 341,
+      "classe_e_baixa": 63,
+      "pct_classe_a": 53.45,
+      "pct_classe_e": 9.87
+    },
+    {
+      "cod_mun": "3510609",
+      "nm_mun": "Carapicuíba",
+      "setores": 873,
+      "ivs_medio": 69.91,
+      "renda_mediana": 2417.24,
+      "densidade_mediana": 19006.74,
+      "coabitacao_mediana": 2.82,
+      "classe_a_alta": 316,
+      "classe_e_baixa": 52,
+      "pct_classe_a": 36.2,
+      "pct_classe_e": 5.96
+    },
+    {
+      "cod_mun": "3553005",
+      "nm_mun": "Taguaí",
+      "setores": 32,
+      "ivs_medio": 68.32,
+      "renda_mediana": 1877.5,
+      "densidade_mediana": 4320.91,
+      "coabitacao_mediana": 2.9,
+      "classe_a_alta": 15,
+      "classe_e_baixa": 0,
+      "pct_classe_a": 46.88,
+      "pct_classe_e": 0.0
+    },
+    {
+      "cod_mun": "3510153",
+      "nm_mun": "Canitar",
+      "setores": 18,
+      "ivs_medio": 68.18,
+      "renda_mediana": 2125.06,
+      "densidade_mediana": 2829.22,
+      "coabitacao_mediana": 3.07,
+      "classe_a_alta": 5,
+      "classe_e_baixa": 1,
+      "pct_classe_a": 27.78,
+      "pct_classe_e": 5.56
+    }
+  ],
+  "top_municipios_menos_vulneraveis": [
+    {
+      "cod_mun": "3500600",
+      "nm_mun": "Águas de São Pedro",
+      "setores": 7,
+      "ivs_medio": 19.96,
+      "renda_mediana": 4328.23,
+      "densidade_mediana": 1424.16,
+      "coabitacao_mediana": 2.51,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 3,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 42.86
+    },
+    {
+      "cod_mun": "3546207",
+      "nm_mun": "Santa Cruz da Conceição",
+      "setores": 15,
+      "ivs_medio": 28.0,
+      "renda_mediana": 2973.25,
+      "densidade_mediana": 530.94,
+      "coabitacao_mediana": 2.71,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 6,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 40.0
+    },
+    {
+      "cod_mun": "3532868",
+      "nm_mun": "Nova Castilho",
+      "setores": 5,
+      "ivs_medio": 28.74,
+      "renda_mediana": 2468.29,
+      "densidade_mediana": 2.02,
+      "coabitacao_mediana": 2.75,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 3,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 60.0
+    },
+    {
+      "cod_mun": "3531209",
+      "nm_mun": "Monte Alegre do Sul",
+      "setores": 33,
+      "ivs_medio": 28.74,
+      "renda_mediana": 2860.58,
+      "densidade_mediana": 489.07,
+      "coabitacao_mediana": 2.65,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 11,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 33.33
+    },
+    {
+      "cod_mun": "3548203",
+      "nm_mun": "Santo Antônio do Pinhal",
+      "setores": 31,
+      "ivs_medio": 29.21,
+      "renda_mediana": 2818.98,
+      "densidade_mediana": 67.67,
+      "coabitacao_mediana": 2.72,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 10,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 32.26
+    },
+    {
+      "cod_mun": "3546256",
+      "nm_mun": "Santa Cruz da Esperança",
+      "setores": 7,
+      "ivs_medio": 29.37,
+      "renda_mediana": 2327.68,
+      "densidade_mediana": 3.39,
+      "coabitacao_mediana": 2.65,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 4,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 57.14
+    },
+    {
+      "cod_mun": "3555901",
+      "nm_mun": "Uru",
+      "setores": 5,
+      "ivs_medio": 29.38,
+      "renda_mediana": 2478.02,
+      "densidade_mediana": 311.24,
+      "coabitacao_mediana": 2.52,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 2,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 40.0
+    },
+    {
+      "cod_mun": "3556206",
+      "nm_mun": "Valinhos",
+      "setores": 231,
+      "ivs_medio": 29.41,
+      "renda_mediana": 4444.95,
+      "densidade_mediana": 3708.38,
+      "coabitacao_mediana": 2.71,
+      "classe_a_alta": 2,
+      "classe_e_baixa": 94,
+      "pct_classe_a": 0.87,
+      "pct_classe_e": 40.69
+    },
+    {
+      "cod_mun": "3528205",
+      "nm_mun": "Macedônia",
+      "setores": 13,
+      "ivs_medio": 29.7,
+      "renda_mediana": 2644.15,
+      "densidade_mediana": 9.45,
+      "coabitacao_mediana": 2.72,
+      "classe_a_alta": 0,
+      "classe_e_baixa": 6,
+      "pct_classe_a": 0.0,
+      "pct_classe_e": 46.15
+    },
+    {
+      "cod_mun": "3548807",
+      "nm_mun": "São Caetano do Sul",
+      "setores": 431,
+      "ivs_medio": 29.79,
+      "renda_mediana": 5254.28,
+      "densidade_mediana": 15147.28,
+      "coabitacao_mediana": 2.67,
+      "classe_a_alta": 1,
+      "classe_e_baixa": 143,
+      "pct_classe_a": 0.23,
+      "pct_classe_e": 33.18
+    }
+  ],
+  "top_distritos_sp_vulneraveis": [
+    {
+      "NM_DIST": "Lajeado",
+      "setores": 308,
+      "ivs_medio": 83.39,
+      "renda_mediana": 1852.42,
+      "coabitacao_mediana": 2.91
+    },
+    {
+      "NM_DIST": "Jardim Helena",
+      "setores": 251,
+      "ivs_medio": 82.65,
+      "renda_mediana": 1944.46,
+      "coabitacao_mediana": 2.92
+    },
+    {
+      "NM_DIST": "Jardim Ângela",
+      "setores": 743,
+      "ivs_medio": 82.55,
+      "renda_mediana": 1908.56,
+      "coabitacao_mediana": 2.84
+    },
+    {
+      "NM_DIST": "Cidade Tiradentes",
+      "setores": 428,
+      "ivs_medio": 81.01,
+      "renda_mediana": 1951.27,
+      "coabitacao_mediana": 2.88
+    },
+    {
+      "NM_DIST": "São Rafael",
+      "setores": 300,
+      "ivs_medio": 80.85,
+      "renda_mediana": 1844.84,
+      "coabitacao_mediana": 2.92
+    },
+    {
+      "NM_DIST": "Brasilândia",
+      "setores": 518,
+      "ivs_medio": 80.84,
+      "renda_mediana": 1975.44,
+      "coabitacao_mediana": 2.81
+    },
+    {
+      "NM_DIST": "Iguatemi",
+      "setores": 296,
+      "ivs_medio": 80.3,
+      "renda_mediana": 1883.13,
+      "coabitacao_mediana": 2.91
+    },
+    {
+      "NM_DIST": "Pedreira",
+      "setores": 379,
+      "ivs_medio": 79.8,
+      "renda_mediana": 2009.13,
+      "coabitacao_mediana": 2.87
+    },
+    {
+      "NM_DIST": "Itaim Paulista",
+      "setores": 413,
+      "ivs_medio": 78.07,
+      "renda_mediana": 1989.71,
+      "coabitacao_mediana": 2.88
+    },
+    {
+      "NM_DIST": "Grajaú",
+      "setores": 1101,
+      "ivs_medio": 77.98,
+      "renda_mediana": 1863.03,
+      "coabitacao_mediana": 2.86
+    }
+  ],
+  "top_distritos_sp_menos_vulneraveis": [
+    {
+      "NM_DIST": "Moema",
+      "setores": 310,
+      "ivs_medio": 5.45,
+      "renda_mediana": 15233.87,
+      "coabitacao_mediana": 2.2
+    },
+    {
+      "NM_DIST": "Jardim Paulista",
+      "setores": 336,
+      "ivs_medio": 5.52,
+      "renda_mediana": 14756.56,
+      "coabitacao_mediana": 2.04
+    },
+    {
+      "NM_DIST": "Pinheiros",
+      "setores": 222,
+      "ivs_medio": 5.91,
+      "renda_mediana": 13345.76,
+      "coabitacao_mediana": 2.07
+    },
+    {
+      "NM_DIST": "Itaim Bibi",
+      "setores": 373,
+      "ivs_medio": 5.98,
+      "renda_mediana": 15179.69,
+      "coabitacao_mediana": 2.07
+    },
+    {
+      "NM_DIST": "Alto de Pinheiros",
+      "setores": 134,
+      "ivs_medio": 6.89,
+      "renda_mediana": 13192.34,
+      "coabitacao_mediana": 2.35
+    },
+    {
+      "NM_DIST": "Vila Mariana",
+      "setores": 561,
+      "ivs_medio": 8.71,
+      "renda_mediana": 11918.81,
+      "coabitacao_mediana": 2.2
+    },
+    {
+      "NM_DIST": "Perdizes",
+      "setores": 356,
+      "ivs_medio": 9.56,
+      "renda_mediana": 11465.03,
+      "coabitacao_mediana": 2.24
+    },
+    {
+      "NM_DIST": "Consolação",
+      "setores": 233,
+      "ivs_medio": 10.09,
+      "renda_mediana": 9891.05,
+      "coabitacao_mediana": 1.89
+    },
+    {
+      "NM_DIST": "Santo Amaro",
+      "setores": 242,
+      "ivs_medio": 10.3,
+      "renda_mediana": 10473.44,
+      "coabitacao_mediana": 2.41
+    },
+    {
+      "NM_DIST": "Barra Funda",
+      "setores": 116,
+      "ivs_medio": 12.84,
+      "renda_mediana": 11857.38,
+      "coabitacao_mediana": 2.25
+    }
+  ],
+  "distribuicao_classes": {
+    "D - Baixa": 20520,
+    "C - Media": 20520,
+    "B - Alta": 20520,
+    "A - Muito alta": 20520,
+    "E - Muito baixa": 20519
+  },
+  "limitacoes": [
+    "Nao inclui dados de criminalidade/violencia (Fase 2 do indice)",
+    "Nao usa dados de mortalidade Datasus (Fase 2)",
+    "Setores CD_TIPO 4 (parques) ficam com vuln neutra - pode confundir leitor",
+    "Renda de ~2,3% dos setores e predita (predicao_stack), pode ter erro em casos atipicos",
+    "NM_BAIRRO vazio em SP-capital - usa NM_DIST como nivel de analise"
+  ]
+}

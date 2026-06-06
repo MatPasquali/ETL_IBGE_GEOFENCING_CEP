@@ -3,14 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IVS — Índice Socioambiental · ETL IBGE Geofencing CEP</title>
+  <title>IVS — Vulnerabilidade Socioambiental SP · ETL IBGE Geofencing CEP</title>
+  <meta name="description" content="Índice composto de vulnerabilidade socioambiental por setor censitário em SP. Mapa interativo dos 645 municípios + ranking de distritos." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+
   <link rel="stylesheet" href="css/custom.css" />
+  <link rel="stylesheet" href="css/ivs.css" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231E3A5F'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Inter,sans-serif' font-size='28' font-weight='800' fill='white'%3EEI%3C/text%3E%3C/svg%3E" />
 </head>
 <body>
+
+  <!-- ========== HEADER ========== -->
   <header class="site-header">
     <div class="container nav-wrapper">
       <a href="index.html" class="nav-brand"><span class="nav-brand-mark">EI</span><span>ETL IBGE</span></a>
@@ -27,29 +39,273 @@
     </div>
   </header>
 
+  <!-- ========== HERO ========== -->
   <section class="hero">
     <div class="container">
-      <span class="hero-eyebrow">Em construção · Fase 4</span>
-      <h1>IVS — Índice de Vulnerabilidade Socioambiental</h1>
+      <span class="hero-eyebrow">Índice socioambiental · Síntese</span>
+      <h1>Onde estão as <span class="text-accent">regiões de maior vulnerabilidade</span> em São Paulo?</h1>
       <p class="hero-lead">
-        Esta seção apresentará o mapa choropleth interativo de SP, o ranking de distritos mais e menos vulneráveis,
-        e a explicação dos 4 componentes do índice (renda 40%, densidade 25%, tipo especial 20%, coabitação 15%).
+        IVS é um índice composto 0-100 que reflete vulnerabilidade socioeconômica por setor censitário,
+        combinando 4 dimensões IBGE: <strong>renda</strong>, <strong>densidade demográfica</strong>,
+        <strong>tipo especial do setor</strong> e <strong>coabitação habitacional</strong>. Pesos justificados
+        na literatura IPEA-IVS e PNUD.
       </p>
-      <div class="hero-ctas">
-        <a href="index.html" class="btn btn-primary">← Voltar ao início</a>
-        <a href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP/blob/main/notebooks/7_indice_socioambiental_sp.ipynb" target="_blank" rel="noopener" class="btn btn-secondary">Ver notebook 7</a>
+
+      <div class="inline-stats">
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-setores">—</div>
+          <div class="inline-stat-label">Setores classificados</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-municipios">—</div>
+          <div class="inline-stat-label">Municípios SP</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">4</div>
+          <div class="inline-stat-label">Componentes do índice</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-cobertura">—</div>
+          <div class="inline-stat-label">Cobertura IVS</div>
+        </div>
+      </div>
+
+      <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 1rem 1.25rem; border-radius: 8px; margin-top: 2rem;">
+        <strong style="color: #92400E;">⚠ Framing ético importante:</strong>
+        <p style="margin: 0.5rem 0 0; color: #78350F; font-size: 0.9rem; line-height: 1.55;">
+          Este NÃO é "risco de vida" ou "região perigosa". É um índice de <strong>vulnerabilidade
+          socioeconômica</strong> — indica onde políticas públicas podem ter maior impacto. Renda baixa não
+          significa "risco"; significa <strong>necessidade de atenção pública</strong>.
+        </p>
       </div>
     </div>
   </section>
 
+  <!-- ========== 🎯 MAPA INTERATIVO ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="interactive-badge">Interativo</span>
+      <h2 class="section-title">Mapa de São Paulo por município.</h2>
+      <p class="section-lead">
+        <strong>Hover</strong> num município para ver detalhes (IVS, renda, coabitação, setores).
+        <strong>Click</strong> para dar zoom. Use os filtros para destacar apenas uma das 5 classes de
+        vulnerabilidade.
+      </p>
+
+      <div class="map-wrapper">
+        <div class="map-controls">
+          <div class="class-filter" role="group" aria-label="Filtro por classe">
+            <button class="class-filter-btn active" data-classe="todas">Todas</button>
+            <button class="class-filter-btn" data-classe="A - Muito alta">A · Muito alta</button>
+            <button class="class-filter-btn" data-classe="B - Alta">B · Alta</button>
+            <button class="class-filter-btn" data-classe="C - Media">C · Média</button>
+            <button class="class-filter-btn" data-classe="D - Baixa">D · Baixa</button>
+            <button class="class-filter-btn" data-classe="E - Muito baixa">E · Muito baixa</button>
+          </div>
+          <div>
+            <div class="map-legend">
+              <span>Vulnerabilidade:</span>
+              <div class="map-legend-gradient" aria-hidden="true"></div>
+            </div>
+            <div class="map-legend-labels">
+              <span>baixa</span>
+              <span>alta</span>
+            </div>
+          </div>
+        </div>
+        <div id="ivs-map"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMPONENTES DO ÍNDICE ========== -->
+  <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <span class="section-eyebrow">Metodologia</span>
+      <h2 class="section-title">Os 4 componentes do índice.</h2>
+      <p class="section-lead">
+        Cada componente é padronizado via <strong>z-score</strong>, multiplicado pelo seu peso, e somado.
+        O resultado é convertido em <strong>percentil rank 0-100</strong> (relativo a SP). Classificação
+        A-E em quintis exatos.
+      </p>
+
+      <div id="componentes-grid" data-needs-data class="componentes-grid"></div>
+    </div>
+  </section>
+
+  <!-- ========== RANKINGS MUNICÍPIOS ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="section-eyebrow">Rankings</span>
+      <h2 class="section-title">Os extremos de São Paulo.</h2>
+      <p class="section-lead">
+        Top 10 municípios mais vulneráveis (à esquerda) vs menos vulneráveis (à direita). A periferia RMSP
+        (Francisco Morato, Ferraz, Itaquaquecetuba, Diadema) concentra alta vulnerabilidade. Águas de São
+        Pedro, São Caetano, Vinhedo e Valinhos lideram baixa vulnerabilidade.
+      </p>
+
+      <div class="rankings-grid">
+        <div class="ranking-table">
+          <div class="ranking-table-header">
+            <h3 class="ranking-table-title"><span class="ranking-table-title-icon">⚠</span>Mais vulneráveis (IVS alto)</h3>
+            <span class="tag tag-accent">Top 10</span>
+          </div>
+          <div id="ranking-mun-top" data-needs-data class="ranking-table-content"></div>
+        </div>
+
+        <div class="ranking-table">
+          <div class="ranking-table-header">
+            <h3 class="ranking-table-title"><span class="ranking-table-title-icon">✓</span>Menos vulneráveis (IVS baixo)</h3>
+            <span class="tag tag-success">Top 10</span>
+          </div>
+          <div id="ranking-mun-bottom" data-needs-data class="ranking-table-content"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RANKINGS DISTRITOS SP-CAPITAL ========== -->
+  <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <span class="section-eyebrow">Drill SP-capital</span>
+      <h2 class="section-title">Distritos da capital — o contraste interno.</h2>
+      <p class="section-lead">
+        Zona Leste extrema (Lajeado, Cidade Tiradentes, São Rafael, Itaim Paulista) e Zona Sul extrema
+        (Jardim Ângela, Pedreira, Grajaú) dominam vulnerabilidade. Eixo financeiro (Moema, Itaim Bibi,
+        Pinheiros, Jardim Paulista) lidera baixa vulnerabilidade. Observe a <strong>coabitação habitacional</strong>:
+        bairros mais vulneráveis têm ~40% mais moradores por domicílio.
+      </p>
+
+      <div class="rankings-grid">
+        <div class="ranking-table">
+          <div class="ranking-table-header">
+            <h3 class="ranking-table-title"><span class="ranking-table-title-icon">⚠</span>Mais vulneráveis em SP-cap.</h3>
+            <span class="tag tag-accent">Top 10</span>
+          </div>
+          <div id="ranking-dist-top" data-needs-data class="ranking-table-content"></div>
+        </div>
+
+        <div class="ranking-table">
+          <div class="ranking-table-header">
+            <h3 class="ranking-table-title"><span class="ranking-table-title-icon">✓</span>Menos vulneráveis em SP-cap.</h3>
+            <span class="tag tag-success">Top 10</span>
+          </div>
+          <div id="ranking-dist-bottom" data-needs-data class="ranking-table-content"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VALIDAÇÃO ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="validacao-box">
+        <h3>✓ Validação metodológica</h3>
+        <p style="margin: 0; color: #047857; line-height: 1.65;">
+          <strong>O índice se sustenta:</strong> todas as correlações esperadas se confirmam nos dados. Renda
+          alta correlaciona inversamente com IVS, densidade e coabitação correlacionam positivamente. Bairros
+          conhecidos como pobres (Francisco Morato, Jardim Ângela) aparecem no topo; bairros nobres (Moema,
+          Itaim Bibi) aparecem na base — o "Teste de Plausibilidade" passou.
+        </p>
+
+        <div class="validacao-stats">
+          <div class="validacao-stat">
+            <span class="validacao-stat-label">Corr. IVS × Renda</span>
+            <span class="validacao-stat-value" id="correl-renda">—</span>
+          </div>
+          <div class="validacao-stat">
+            <span class="validacao-stat-label">Corr. IVS × Densidade</span>
+            <span class="validacao-stat-value" id="correl-densidade">—</span>
+          </div>
+          <div class="validacao-stat">
+            <span class="validacao-stat-label">Corr. IVS × Coabitação</span>
+            <span class="validacao-stat-value" id="correl-coab">—</span>
+          </div>
+        </div>
+
+        <p style="margin: 1rem 0 0; color: #065F46; font-size: 0.9rem; line-height: 1.55;">
+          <strong>Interpretação:</strong> -0,61 com renda significa que o IVS captura também outras dimensões
+          além de renda pura (coabitação, tipo, densidade). Se fosse -0,95, seria só renda disfarçada — o IVS
+          agrega valor real.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LIMITAÇÕES (HONEST) ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <span class="section-eyebrow">XAI honesto</span>
+      <h2 class="section-title">Limitações conhecidas.</h2>
+      <p class="section-lead">
+        Transparência por design: o índice é útil dentro do escopo dele, mas tem limitações que afetam
+        interpretação. Documentadas pra evitar uso indevido.
+      </p>
+      <div id="limitacoes-list" data-needs-data class="limitacoes-list"></div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <a href="explorar.html" class="next-cta">
+        <div class="next-cta-text">
+          <strong>Próxima: Explorar setor</strong>
+          <span>Busca interativa por código de setor em SP-capital — card completo com renda, CEPs, IVS e classe.</span>
+        </div>
+        <span class="next-cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
   <footer class="site-footer">
     <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-brand-mark" style="background: rgba(255,255,255,0.15);">EI</span>
+            <span>ETL IBGE Geofencing CEP</span>
+          </div>
+          <p class="footer-tagline">
+            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE — desenvolvido como parte
+            do Mestrado em Computação Aplicada na Universidade Presbiteriana Mackenzie.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navegação</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="index.html">Início</a></li>
+            <li><a class="footer-link" href="pipeline.html">Pipeline</a></li>
+            <li><a class="footer-link" href="modelagem.html">Modelagem</a></li>
+            <li><a class="footer-link" href="ivs.html">IVS</a></li>
+            <li><a class="footer-link" href="explorar.html">Explorar</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Contato</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="https://github.com/MatPasquali" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="footer-link" href="https://www.linkedin.com/in/matpasquali" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="footer-link" href="mailto:matpasqsi@gmail.com">matpasqsi@gmail.com</a></li>
+            <li><a class="footer-link" href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP" target="_blank" rel="noopener">Repositório</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider" />
       <div class="footer-bottom">
         <div><strong style="color: white;">Mateus de Pasquali</strong> · 2026</div>
-        <span class="mackenzie-badge">Mackenzie · Mestrado em Computação Aplicada</span>
+        <span class="mackenzie-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          Mackenzie · Mestrado em Computação Aplicada
+        </span>
       </div>
     </div>
   </footer>
+
   <script src="js/nav.js"></script>
+  <script src="js/ivs.js"></script>
 </body>
 </html>

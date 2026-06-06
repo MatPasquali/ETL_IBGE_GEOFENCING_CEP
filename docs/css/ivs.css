@@ -1,0 +1,464 @@
+/* Estilos especificos da pagina ivs.html */
+
+/* === Mapa interativo === */
+.map-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+#ivs-map {
+  width: 100%;
+  height: 580px;
+  background: #F9FAFB;
+}
+
+#ivs-map.loading::after {
+  content: 'Carregando mapa de 645 municípios...';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  z-index: 10;
+}
+
+.map-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #F9FAFB;
+  border-bottom: 1px solid var(--color-border);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.map-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.map-legend-gradient {
+  display: flex;
+  align-items: center;
+  height: 18px;
+  width: 200px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    #FFEDA0 0%,
+    #FED976 16%,
+    #FEB24C 33%,
+    #FD8D3C 50%,
+    #FC4E2A 66%,
+    #E31A1C 83%,
+    #B10026 100%
+  );
+  border: 1px solid var(--color-border);
+}
+.map-legend-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  width: 200px;
+  margin-top: 0.2rem;
+}
+
+/* Filtro classe */
+.class-filter {
+  display: flex;
+  gap: 0.25rem;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem;
+}
+.class-filter-btn {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 0;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.class-filter-btn:hover { background: #F3F4F6; }
+.class-filter-btn.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* Popup de municipio selecionado */
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+.leaflet-popup-content {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.875rem !important;
+  margin: 1rem 1.25rem !important;
+  line-height: 1.5 !important;
+  min-width: 220px;
+}
+.popup-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 0.5rem;
+}
+.popup-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 0.85rem;
+}
+.popup-row:last-child { border-bottom: 0; }
+.popup-label { color: var(--color-text-muted); }
+.popup-value {
+  font-weight: 600;
+  color: var(--color-text);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* === 4 cards de componentes === */
+.componentes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.componente-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.componente-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.componente-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--color-accent);
+}
+.componente-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.componente-icon-wrap {
+  width: 48px;
+  height: 48px;
+  background: rgba(230, 126, 34, 0.12);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+.componente-peso {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+}
+.componente-nome {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 0.5rem;
+}
+.componente-desc {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.55;
+  margin: 0 0 1rem;
+}
+.componente-formula {
+  background: #F9FAFB;
+  border-left: 3px solid var(--color-primary);
+  padding: 0.625rem 0.875rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  color: var(--color-primary);
+  margin: 0 0 0.875rem;
+}
+.componente-just {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--color-border);
+}
+.componente-correl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  background: rgba(39, 174, 96, 0.12);
+  color: var(--color-success);
+  border-radius: 999px;
+}
+
+/* === Tabelas de rankings === */
+.rankings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+@media (max-width: 768px) { .rankings-grid { grid-template-columns: 1fr; } }
+
+.ranking-table {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.ranking-table-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ranking-table-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+.ranking-table-title-icon {
+  margin-right: 0.5rem;
+}
+.ranking-table-content {
+  padding: 0.5rem 0;
+}
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  border-bottom: 1px solid #F9FAFB;
+  transition: background 0.15s;
+}
+.ranking-row:last-child { border-bottom: 0; }
+.ranking-row:hover { background: #F9FAFB; }
+.ranking-pos {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ranking-row:nth-child(1) .ranking-pos {
+  background: var(--color-accent);
+  color: white;
+}
+.ranking-info {
+  flex: 1;
+  min-width: 0;
+}
+.ranking-nome {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ranking-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+.ranking-ivs {
+  flex-shrink: 0;
+  text-align: right;
+}
+.ranking-ivs-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.ranking-ivs-label {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+/* Cores IVS por intensidade */
+.ivs-cor-altissima { color: #B10026; }
+.ivs-cor-alta      { color: #E31A1C; }
+.ivs-cor-media     { color: #FD8D3C; }
+.ivs-cor-baixa     { color: #FED976; }
+.ivs-cor-baixissima { color: #41AB5D; }
+
+/* === Box validação === */
+.validacao-box {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border: 1px solid #6EE7B7;
+  border-left: 4px solid var(--color-success);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 2rem;
+  margin: 3rem 0;
+}
+.validacao-box h3 {
+  color: #065F46;
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+.validacao-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+.validacao-stat {
+  background: white;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(110, 231, 183, 0.5);
+}
+.validacao-stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #065F46;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.validacao-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #047857;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+}
+
+/* === Limitações (honest) === */
+.limitacoes-list {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+}
+.limitacoes-list li {
+  margin-bottom: 0.625rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.limitacoes-list li:last-child { margin-bottom: 0; }
+
+/* Inline stats reaproveitado */
+.inline-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.inline-stat {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1.125rem;
+}
+.inline-stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.inline-stat-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* CTA */
+.next-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 2rem;
+  margin-top: 4rem;
+  text-decoration: none;
+  color: inherit;
+  gap: 1rem;
+  transition: all 0.15s;
+}
+.next-cta:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.next-cta-text strong {
+  display: block;
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  margin-bottom: 0.2rem;
+}
+.next-cta-text span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+.next-cta-arrow {
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-size: 1.5rem;
+}
+
+.interactive-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.875rem;
+}
+.interactive-badge::before { content: '⚡'; font-size: 0.85rem; }
