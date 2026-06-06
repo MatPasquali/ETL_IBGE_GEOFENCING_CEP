@@ -18,6 +18,11 @@
 
   <link rel="stylesheet" href="css/custom.css" />
   <link rel="stylesheet" href="css/explorar.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+
+  <!-- Fuse.js para busca fuzzy no conhecimento do projeto -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" defer></script>
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231E3A5F'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Inter,sans-serif' font-size='28' font-weight='800' fill='white'%3EEI%3C/text%3E%3C/svg%3E" />
 </head>
 <body>
@@ -137,6 +142,69 @@
     </div>
   </section>
 
+  <!-- ========== 🤖 CHAT XAI DO PROJETO ========== -->
+  <section class="section chat-section">
+    <div class="container">
+      <span class="interactive-badge">Interativo · IA do Projeto</span>
+      <h2 class="section-title">💬 Pergunte qualquer coisa sobre o projeto.</h2>
+      <p class="section-lead">
+        Uma IA local "treinada" no conhecimento completo do projeto: 7 notebooks, relatório técnico, README,
+        memos técnicos. <strong>Busca semântica fuzzy</strong> sobre 238 chunks de conteúdo + 33 perguntas
+        frequentes pré-curadas. 100% offline, sem API externa.
+      </p>
+
+      <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+          <div class="chat-header-avatar">🤖</div>
+          <div class="chat-header-info">
+            <h3 class="chat-header-title">
+              IA do Projeto
+              <span class="chat-status">online</span>
+            </h3>
+            <div class="chat-header-sub">238 chunks indexados · busca em tempo real</div>
+          </div>
+        </div>
+
+        <!-- Mensagens -->
+        <div id="chat-messages" class="chat-messages">
+          <!-- preenchido por JS -->
+        </div>
+
+        <!-- Categorias -->
+        <div id="chat-categories" class="chat-categories">
+          <!-- preenchido por JS -->
+        </div>
+
+        <!-- Sugestões -->
+        <div class="chat-suggestions">
+          <span class="chat-suggestions-label">Perguntas sugeridas</span>
+          <div id="chat-suggestions" class="chat-suggestions-row">
+            <!-- preenchido por JS -->
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-wrapper">
+          <textarea
+            id="chat-input"
+            class="chat-input"
+            placeholder="Pergunte qualquer coisa sobre o projeto..."
+            rows="1"></textarea>
+          <button id="chat-send" class="chat-send" aria-label="Enviar pergunta">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+        <div class="chat-footer-disclaimer">
+          IA local com Fuse.js. Conhece apenas o conteúdo público deste projeto.
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ========== CTA BACK ========== -->
   <section class="section-tight">
     <div class="container">
@@ -199,5 +267,6 @@
 
   <script src="js/nav.js"></script>
   <script src="js/explorar.js"></script>
+  <script src="js/chat.js"></script>
 </body>
 </html>
