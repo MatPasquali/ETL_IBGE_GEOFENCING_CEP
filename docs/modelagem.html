@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modelagem 100% · ETL IBGE Geofencing CEP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/custom.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231E3A5F'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Inter,sans-serif' font-size='28' font-weight='800' fill='white'%3EEI%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="nav-brand"><span class="nav-brand-mark">EI</span><span>ETL IBGE</span></a>
+      <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Início</a>
+        <a href="pipeline.html" class="nav-link">Pipeline</a>
+        <a href="modelagem.html" class="nav-link">Modelagem</a>
+        <a href="ivs.html" class="nav-link">IVS</a>
+        <a href="explorar.html" class="nav-link">Explorar</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <span class="hero-eyebrow">Em construção · Fase 3</span>
+      <h1>Modelagem 100% — XAI do Stacking Ensemble</h1>
+      <p class="hero-lead">
+        Esta seção mostrará a comparação dos 6 modelos avaliados, os pesos aprendidos pelo Ridge meta-learner,
+        feature importance via SHAP, partial dependence plots, e waterfall plots de casos exemplares.
+        Vencedor: Stacking com MAE R$ 1.023.
+      </p>
+      <div class="hero-ctas">
+        <a href="index.html" class="btn btn-primary">← Voltar ao início</a>
+        <a href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP/blob/main/notebooks/2_analises_diagnostico.ipynb" target="_blank" rel="noopener" class="btn btn-secondary">Ver notebook 2</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div><strong style="color: white;">Mateus de Pasquali</strong> · 2026</div>
+        <span class="mackenzie-badge">Mackenzie · Mestrado em Computação Aplicada</span>
+      </div>
+    </div>
+  </footer>
+  <script src="js/nav.js"></script>
+</body>
+</html>
