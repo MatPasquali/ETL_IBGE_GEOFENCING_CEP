@@ -3,14 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Explorar setor · ETL IBGE Geofencing CEP</title>
+  <title>Explorar setor — SP-capital · ETL IBGE Geofencing CEP</title>
+  <meta name="description" content="Busca interativa pelos 27.252 setores censitários de São Paulo capital. Card completo com renda, CEPs, IVS, classe e mini-mapa." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+
   <link rel="stylesheet" href="css/custom.css" />
+  <link rel="stylesheet" href="css/explorar.css" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231E3A5F'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Inter,sans-serif' font-size='28' font-weight='800' fill='white'%3EEI%3C/text%3E%3C/svg%3E" />
 </head>
 <body>
+
+  <!-- ========== HEADER ========== -->
   <header class="site-header">
     <div class="container nav-wrapper">
       <a href="index.html" class="nav-brand"><span class="nav-brand-mark">EI</span><span>ETL IBGE</span></a>
@@ -27,30 +39,165 @@
     </div>
   </header>
 
+  <!-- ========== HERO ========== -->
   <section class="hero">
     <div class="container">
-      <span class="hero-eyebrow">Em construção · Fase 5</span>
-      <h1>Explorar setor — SP-capital</h1>
+      <span class="interactive-badge">Interativo</span>
+      <h1>Busque um <span class="text-accent">setor de SP-capital</span> e veja tudo sobre ele.</h1>
       <p class="hero-lead">
-        Esta seção terá busca interativa pelos 27.252 setores de SP-capital. Digite um <code>cd_setor</code> e veja
-        um card completo com renda, CEPs, vizinhos KNN, IVS, classe de vulnerabilidade, posição no ranking municipal,
-        e mini-mapa do setor.
+        27 mil setores censitários da capital paulista, indexados em tempo real. Cada setor tem renda,
+        CEPs atribuídos, índice de vulnerabilidade, classe e posição no ranking municipal — com flag explícito
+        da origem do dado (IBGE original, imputação ou predição do stack).
       </p>
-      <div class="hero-ctas">
-        <a href="index.html" class="btn btn-primary">← Voltar ao início</a>
-        <a href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP" target="_blank" rel="noopener" class="btn btn-secondary">Ver repositório</a>
+      <div class="inline-stats">
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-total">—</div>
+          <div class="inline-stat-label">Setores em SP-capital</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-distritos">—</div>
+          <div class="inline-stat-label">Distritos administrativos</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-ivs">—</div>
+          <div class="inline-stat-label">IVS médio em SP-capital</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value" id="stat-renda">—</div>
+          <div class="inline-stat-label">Renda mediana</div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ========== LAYOUT BUSCA + CARD ========== -->
+  <section class="section">
+    <div class="container">
+      <div class="explorar-layout">
+
+        <!-- SEARCH PANEL (esquerda) -->
+        <aside class="search-panel">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+            <input
+              type="search"
+              id="search-input"
+              class="search-input"
+              placeholder="cd_setor, distrito ou CEP..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="search-clear" id="search-clear" aria-label="Limpar busca">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <p class="search-hint">
+            Busque por <code>código</code> (ex: <code>3550308</code>), <strong>distrito</strong>
+            (ex: <em>Moema</em>) ou <strong>CEP</strong> (ex: <code>01310</code>).
+          </p>
+
+          <div class="search-classes">
+            <span class="search-classes-label">Filtrar por classe</span>
+            <div class="search-classes-row">
+              <button class="search-class-btn active" data-classe="todas">Todas</button>
+              <button class="search-class-btn" data-classe="A">A</button>
+              <button class="search-class-btn" data-classe="B">B</button>
+              <button class="search-class-btn" data-classe="C">C</button>
+              <button class="search-class-btn" data-classe="D">D</button>
+              <button class="search-class-btn" data-classe="E">E</button>
+            </div>
+          </div>
+
+          <div class="results-header">
+            <span id="results-count">—</span>
+            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;">IVS · Classe</span>
+          </div>
+
+          <div id="results-list" class="results-list">
+            <div class="loading-state">
+              <div class="loading-spinner"></div>
+              <div>Carregando setores...</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- CARD DO SETOR (direita) -->
+        <div id="setor-card" class="setor-card">
+          <!-- preenchido por JS -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA BACK ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <a href="index.html" class="cta-back">
+        <div class="cta-back-text">
+          <strong>← Voltar ao início</strong>
+          <span>Você navegou todo o pipeline: ETL → Modelagem → IVS → Explorar setor. Obrigado pela visita!</span>
+        </div>
+        <span class="cta-back-arrow" aria-hidden="true">↩</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
   <footer class="site-footer">
     <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-brand-mark" style="background: rgba(255,255,255,0.15);">EI</span>
+            <span>ETL IBGE Geofencing CEP</span>
+          </div>
+          <p class="footer-tagline">
+            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE — desenvolvido como parte
+            do Mestrado em Computação Aplicada na Universidade Presbiteriana Mackenzie.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navegação</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="index.html">Início</a></li>
+            <li><a class="footer-link" href="pipeline.html">Pipeline</a></li>
+            <li><a class="footer-link" href="modelagem.html">Modelagem</a></li>
+            <li><a class="footer-link" href="ivs.html">IVS</a></li>
+            <li><a class="footer-link" href="explorar.html">Explorar</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Contato</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="https://github.com/MatPasquali" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="footer-link" href="https://www.linkedin.com/in/mateuspasquali/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="footer-link" href="mailto:matpasqsi@gmail.com">matpasqsi@gmail.com</a></li>
+            <li><a class="footer-link" href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP" target="_blank" rel="noopener">Repositório</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider" />
       <div class="footer-bottom">
         <div><strong style="color: white;">Mateus de Pasquali</strong> · 2026</div>
-        <span class="mackenzie-badge">Mackenzie · Mestrado em Computação Aplicada</span>
+        <span class="mackenzie-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          Mackenzie · Mestrado em Computação Aplicada
+        </span>
       </div>
     </div>
   </footer>
+
   <script src="js/nav.js"></script>
+  <script src="js/explorar.js"></script>
 </body>
 </html>
