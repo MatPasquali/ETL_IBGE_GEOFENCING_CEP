@@ -1,0 +1,276 @@
+/* Estilos especificos da pagina pipeline.html */
+
+/* Container do Sankey */
+.sankey-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem 0.5rem;
+  margin-top: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.sankey-wrapper-tall { height: 480px; }
+
+/* Cards das 8 etapas */
+.etapas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.etapa-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.etapa-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color-accent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.etapa-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.etapa-card:hover::before {
+  opacity: 1;
+}
+
+.etapa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.etapa-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  font-weight: 800;
+  font-size: 0.875rem;
+}
+
+.etapa-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.etapa-titulo {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0.25rem 0 0;
+  line-height: 1.3;
+}
+
+.etapa-descricao {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+
+.etapa-descricao code {
+  background: rgba(30, 58, 95, 0.07);
+  color: var(--color-primary);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.etapa-tech {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  background: rgba(230, 126, 34, 0.08);
+  padding: 0.35rem 0.625rem;
+  border-radius: 4px;
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+/* Box de destaque do bug */
+.bug-box {
+  background: linear-gradient(135deg, #FFF6E6 0%, #FFF1D4 100%);
+  border: 1px solid #F39C12;
+  border-left: 4px solid #E67E22;
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  margin: 3rem 0;
+  position: relative;
+}
+
+.bug-box-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.bug-box-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.bug-box-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7E5109;
+}
+
+.bug-box-content {
+  color: #6E4A0C;
+  line-height: 1.65;
+}
+
+.bug-box-content p { margin: 0 0 0.875rem; }
+.bug-box-content p:last-child { margin-bottom: 0; }
+
+.bug-box-content code {
+  background: rgba(126, 81, 9, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875em;
+  color: #5D3805;
+}
+
+.bug-box-diff {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+  margin: 1.25rem 0;
+}
+
+@media (max-width: 640px) {
+  .bug-box-diff { grid-template-columns: 1fr; }
+}
+
+.bug-diff-block {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  border: 1px solid rgba(230, 126, 34, 0.3);
+}
+
+.bug-diff-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.bug-diff-label.before { color: #C0392B; }
+.bug-diff-label.after  { color: #27AE60; }
+
+.bug-diff-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  color: #2C3E50;
+}
+
+/* Stat cards inline (numerinhos rapidos) */
+.inline-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.inline-stat {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1.125rem;
+}
+
+.inline-stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.inline-stat-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* CTA navega entre paginas */
+.next-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 2rem;
+  margin-top: 4rem;
+  transition: all 0.15s;
+  text-decoration: none;
+  color: inherit;
+  gap: 1rem;
+}
+
+.next-cta:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.next-cta-text strong {
+  display: block;
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  margin-bottom: 0.2rem;
+}
+
+.next-cta-text span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.next-cta-arrow {
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-size: 1.5rem;
+}

@@ -1,0 +1,94 @@
+{
+  "geofencing": {
+    "title": "Fluxo do geofencing — de endereços a setores com CEP",
+    "subtitle": "22,9 milhões de endereços do CNEFE atribuídos a setores via point-in-polygon, com fallback híbrido para micro-setores de borda.",
+    "nodes": [
+      { "label": "102.599 setores no shapefile CD2022 SP", "color": "#1E3A5F" },
+      { "label": "Via Geofencing (point-in-polygon)", "color": "#E67E22" },
+      { "label": "Via CNEFE original (fallback híbrido)", "color": "#F39C12" },
+      { "label": "Legítimos sem endereço CNEFE", "color": "#95A5A6" },
+      { "label": "102.591 setores COM CEP (99,99%)", "color": "#27AE60" },
+      { "label": "8 setores SEM CEP", "color": "#7F8C8D" }
+    ],
+    "links": [
+      { "source": 0, "target": 1, "value": 102133, "label": "Caso saudável" },
+      { "source": 0, "target": 2, "value": 458, "label": "Micro-setores em borda" },
+      { "source": 0, "target": 3, "value": 8, "label": "Parques, áreas industriais" },
+      { "source": 1, "target": 4, "value": 102133 },
+      { "source": 2, "target": 4, "value": 458 },
+      { "source": 3, "target": 5, "value": 8 }
+    ]
+  },
+
+  "cobertura_renda": {
+    "title": "Fluxo da cobertura de renda — do dado original aos 100%",
+    "subtitle": "Cascata original → imputação → predição preserva integridade do dado IBGE em coluna separada.",
+    "nodes": [
+      { "label": "102.599 setores SP", "color": "#1E3A5F" },
+      { "label": "Renda original IBGE", "color": "#27AE60" },
+      { "label": "Imputado bairro", "color": "#16A085" },
+      { "label": "Imputado subdistrito", "color": "#1ABC9C" },
+      { "label": "Imputado município", "color": "#48C9B0" },
+      { "label": "Predição Stacking (KNN+HGBR+Cluster)", "color": "#E67E22" },
+      { "label": "Imputação sem amostra", "color": "#95A5A6" },
+      { "label": "100% cobertura (102.599)", "color": "#1E3A5F" }
+    ],
+    "links": [
+      { "source": 0, "target": 1, "value": 99223, "label": "Dado IBGE direto (96,71%)" },
+      { "source": 0, "target": 2, "value": 927,   "label": "Mediana do bairro (0,90%)" },
+      { "source": 0, "target": 3, "value": 114,   "label": "Mediana do subdistrito (0,11%)" },
+      { "source": 0, "target": 4, "value": 11,    "label": "Mediana do município (0,01%)" },
+      { "source": 0, "target": 5, "value": 2324,  "label": "Predição por ML (2,27%)" },
+      { "source": 0, "target": 6, "value": 1,     "label": "Fallback (raro)" },
+      { "source": 1, "target": 7, "value": 99223 },
+      { "source": 2, "target": 7, "value": 927 },
+      { "source": 3, "target": 7, "value": 114 },
+      { "source": 4, "target": 7, "value": 11 },
+      { "source": 5, "target": 7, "value": 2324 },
+      { "source": 6, "target": 7, "value": 1 }
+    ]
+  },
+
+  "etapas": [
+    {
+      "n": 1, "titulo": "Renda como driver", "icon": "💰",
+      "descricao": "Lê o XLSX do IBGE (Agregados de Renda) e classifica cada setor em <code>numerica</code>, <code>sigilo</code> (X) ou <code>ausente</code>. Renda é o driver — não o CNEFE.",
+      "tech": "pandas + openpyxl"
+    },
+    {
+      "n": 2, "titulo": "Geofencing CNEFE → setor", "icon": "📍",
+      "descricao": "Para cada um dos 22,9M endereços CNEFE, faz <code>point-in-polygon</code> contra o shapefile CD2022. Grava em duas tabelas SQLite (geo + orig) para suportar fallback híbrido.",
+      "tech": "geopandas + shapely + SQLite"
+    },
+    {
+      "n": 3, "titulo": "Agregar setor → CEPs", "icon": "📬",
+      "descricao": "Para cada setor, agrega lista de CEPs (com origem rotulada). Cascata: setores ausentes em <code>setor_cep_geo</code> caem em <code>setor_cep_orig</code> (fallback).",
+      "tech": "SQL agregação"
+    },
+    {
+      "n": 4, "titulo": "Atributos do shapefile", "icon": "🗂",
+      "descricao": "Carrega atributos do CD2022 sem geometria pesada: <code>CD_BAIRRO</code>, <code>CD_DIST</code>, <code>CD_SUBDIST</code>, <code>CD_TIPO</code>. Necessário para cascata de imputação.",
+      "tech": "geopandas read_file(ignore_geometry=True)"
+    },
+    {
+      "n": 5, "titulo": "Outer join driver=renda", "icon": "🔗",
+      "descricao": "Junta renda (driver) com CEPs agregados. Setores na malha CD2022 com CEP mas sem renda no XLSX viram <code>fora_csv_ibge</code>. Filtra órfãos do CNEFE (códigos antigos).",
+      "tech": "pandas outer join"
+    },
+    {
+      "n": 6, "titulo": "Estatísticas intermediárias", "icon": "📊",
+      "descricao": "Cobertura antes da imputação: quantos setores têm renda original, quantos têm CEP, quantos são <code>fora_csv_ibge</code>. Sanity check fundamental.",
+      "tech": "pandas describe"
+    },
+    {
+      "n": 7, "titulo": "Imputação cascateada", "icon": "🌱",
+      "descricao": "Para setores sem renda com <code>CD_TIPO ∈ {0, 1}</code>: mediana do bairro → subdistrito → distrito → município (cascata, mínimo 5 vizinhos). Tipos especiais (2-9) ficam <code>sem_dado_legitimo_*</code>.",
+      "tech": "groupby + medianas hierárquicas"
+    },
+    {
+      "n": 8, "titulo": "Export", "icon": "💾",
+      "descricao": "Salva parquet + CSV + JSON resumo. Schema final tem 34 colunas, incluindo <code>renda_v06004_estimada</code> (honesta 97,73%) e flag <code>origem_renda</code> para auditoria.",
+      "tech": "pyarrow + pandas to_parquet"
+    }
+  ]
+}

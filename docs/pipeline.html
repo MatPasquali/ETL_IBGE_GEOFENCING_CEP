@@ -4,20 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pipeline ETL · ETL IBGE Geofencing CEP</title>
+  <meta name="description" content="Pipeline ETL em 8 etapas que cruza CNEFE + Shapefile + Renda IBGE via geofencing. 22,9M endereços processados em 5 minutos." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/custom.css" />
+  <link rel="stylesheet" href="css/pipeline.css" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231E3A5F'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Inter,sans-serif' font-size='28' font-weight='800' fill='white'%3EEI%3C/text%3E%3C/svg%3E" />
+
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-2.35.0.min.js" defer></script>
 </head>
 <body>
+
+  <!-- ========== HEADER ========== -->
   <header class="site-header">
     <div class="container nav-wrapper">
-      <a href="index.html" class="nav-brand"><span class="nav-brand-mark">EI</span><span>ETL IBGE</span></a>
+      <a href="index.html" class="nav-brand" aria-label="Página inicial">
+        <span class="nav-brand-mark">EI</span><span>ETL IBGE</span>
+      </a>
       <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
       </button>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Navegação principal">
         <a href="index.html" class="nav-link">Início</a>
         <a href="pipeline.html" class="nav-link">Pipeline</a>
         <a href="modelagem.html" class="nav-link">Modelagem</a>
@@ -27,29 +41,190 @@
     </div>
   </header>
 
+  <!-- ========== HERO ========== -->
   <section class="hero">
     <div class="container">
-      <span class="hero-eyebrow">Em construção · Fase 2</span>
-      <h1>Pipeline ETL — Sankey + arquitetura</h1>
+      <span class="hero-eyebrow">Pipeline · 8 etapas · ~15 minutos</span>
+      <h1>De <span class="text-accent">22,9 milhões de endereços</span> a <span class="text-accent">102.599 setores com CEP</span>.</h1>
       <p class="hero-lead">
-        Esta seção mostrará o fluxo completo dos dados — desde os 22,9 milhões de endereços do CNEFE até os 102.599
-        setores no parquet final — com diagrama Sankey interativo e detalhamento das 8 etapas do pipeline.
+        O CNEFE traz cada endereço com o código de setor que ele "diz" pertencer, mas esses códigos
+        frequentemente referem-se a versões antigas da malha territorial — em SP, 7% dos endereços ficam órfãos.
+        A solução: <strong>ignorar o código informado</strong> e atribuir cada endereço ao setor pela
+        <strong>geometria</strong>, via point-in-polygon contra o shapefile CD2022.
       </p>
-      <div class="hero-ctas">
-        <a href="index.html" class="btn btn-primary">← Voltar ao início</a>
-        <a href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP/blob/main/notebooks/1_pipeline_etl_sp.ipynb" target="_blank" rel="noopener" class="btn btn-secondary">Ver notebook 1</a>
+      <div class="inline-stats">
+        <div class="inline-stat">
+          <div class="inline-stat-value">22.953.725</div>
+          <div class="inline-stat-label">Endereços CNEFE processados</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">102.591</div>
+          <div class="inline-stat-label">Setores com CEP atribuído</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">99,99%</div>
+          <div class="inline-stat-label">Cobertura final em SP</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">~5 min</div>
+          <div class="inline-stat-label">Tempo de geofencing em SP</div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ========== SANKEY 1 — GEOFENCING ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="section-eyebrow">Fluxo do geofencing</span>
+      <h2 class="section-title">Como cada setor ganha seu CEP.</h2>
+      <p class="section-lead">
+        Cascata híbrida em 3 caminhos: <strong>geofencing</strong> (caso saudável), <strong>cnefe_original</strong>
+        (fallback para micro-setores em borda — mediana de 3.600 m²), e <strong>sem_endereco_cnefe</strong>
+        (parques, áreas industriais sem domicílios).
+      </p>
+      <div class="sankey-wrapper">
+        <div id="sankey-geofencing" style="width: 100%; min-height: 420px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ETAPAS DO PIPELINE ========== -->
+  <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <span class="section-eyebrow">Arquitetura</span>
+      <h2 class="section-title">As 8 etapas do pipeline.</h2>
+      <p class="section-lead">
+        Cada etapa tem responsabilidade clara e tecnologia justificada. SQLite intermedia o ingest do CNEFE para evitar
+        OOM com 22,9M de registros; <code>status_ingest</code> garante <strong>resumibility</strong> caso o kernel caia
+        durante o processamento Brasil.
+      </p>
+
+      <div id="etapas-grid" class="etapas-grid"></div>
+    </div>
+  </section>
+
+  <!-- ========== SANKEY 2 — COBERTURA DE RENDA ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="section-eyebrow">Fluxo da cobertura de renda</span>
+      <h2 class="section-title">Do dado original aos 100% — com integridade preservada.</h2>
+      <p class="section-lead">
+        A cascata respeita a hierarquia do dado: dado IBGE primeiro, depois imputação por vizinhos administrativos
+        cada vez mais amplos, e por último predição via stacking ensemble. Cada categoria vira flag explícito em
+        <code>origem_renda_100</code> para auditabilidade total.
+      </p>
+      <div class="sankey-wrapper">
+        <div id="sankey-cobertura" style="width: 100%; min-height: 480px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BUG XLSX ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="bug-box">
+        <div class="bug-box-header">
+          <span class="bug-box-icon">⚠</span>
+          <h3 class="bug-box-title">Bug crítico que pegamos no caminho</h3>
+        </div>
+        <div class="bug-box-content">
+          <p>
+            A função <code>parse_br_number</code> original assumia formato brasileiro
+            (<code>'1.560,08'</code> — ponto como milhar, vírgula como decimal). Funcionava perfeitamente
+            quando o input vinha do CSV. Mas quando o pipeline passou a ler o <strong>XLSX</strong> do IBGE,
+            que armazena números nativamente como float en-US (<code>'1560.08'</code>),
+            a função silenciosamente <strong>multiplicava V06003, V06004 e V06005 por 100</strong>.
+          </p>
+
+          <div class="bug-box-diff">
+            <div class="bug-diff-block">
+              <span class="bug-diff-label before">❌ Antes — setor Tremembé/SP</span>
+              <div class="bug-diff-value">V06004 = R$ 156.008,00</div>
+            </div>
+            <div class="bug-diff-block">
+              <span class="bug-diff-label after">✅ Depois — setor Tremembé/SP</span>
+              <div class="bug-diff-value">V06004 = R$ 1.560,08</div>
+            </div>
+          </div>
+
+          <p>
+            <strong>Como detectamos:</strong> o mapa interativo mostrou rendas absurdas em bairros residenciais
+            comuns. A mediana V06006, por ser inteira no XLSX, escapava do bug — e essa inconsistência
+            denunciou o problema. Validamos confrontando com o XLSX original.
+          </p>
+
+          <p>
+            <strong>Lição:</strong> sempre que um pipeline lê XLSX de terceiros, não assumir formato BR.
+            Excel armazena números como float e <code>pd.read_excel(dtype=str)</code> retorna strings no formato
+            Python padrão (en-US). Use <code>pd.to_numeric(errors='coerce')</code> direto.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA PRÓXIMA PÁGINA ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <a href="modelagem.html" class="next-cta">
+        <div class="next-cta-text">
+          <strong>Próxima: Modelagem 100% — XAI do Stacking Ensemble</strong>
+          <span>6 modelos comparados, vencedor com MAE R$ 1.023, pesos Ridge interpretáveis e SHAP values.</span>
+        </div>
+        <span class="next-cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
   <footer class="site-footer">
     <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-brand-mark" style="background: rgba(255,255,255,0.15);">EI</span>
+            <span>ETL IBGE Geofencing CEP</span>
+          </div>
+          <p class="footer-tagline">
+            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE — desenvolvido como parte
+            do Mestrado em Computação Aplicada na Universidade Presbiteriana Mackenzie.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navegação</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="index.html">Início</a></li>
+            <li><a class="footer-link" href="pipeline.html">Pipeline</a></li>
+            <li><a class="footer-link" href="modelagem.html">Modelagem</a></li>
+            <li><a class="footer-link" href="ivs.html">IVS</a></li>
+            <li><a class="footer-link" href="explorar.html">Explorar</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Contato</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="https://github.com/MatPasquali" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="footer-link" href="https://www.linkedin.com/in/matpasquali" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="footer-link" href="mailto:matpasqsi@gmail.com">matpasqsi@gmail.com</a></li>
+            <li><a class="footer-link" href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP" target="_blank" rel="noopener">Repositório</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider" />
       <div class="footer-bottom">
         <div><strong style="color: white;">Mateus de Pasquali</strong> · 2026</div>
-        <span class="mackenzie-badge">Mackenzie · Mestrado em Computação Aplicada</span>
+        <span class="mackenzie-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          Mackenzie · Mestrado em Computação Aplicada
+        </span>
       </div>
     </div>
   </footer>
+
   <script src="js/nav.js"></script>
+  <script src="js/sankey.js"></script>
 </body>
 </html>
