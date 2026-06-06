@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modelagem 100% · ETL IBGE Geofencing CEP</title>
+  <title>Modelagem 100% — XAI · ETL IBGE Geofencing CEP</title>
+  <meta name="description" content="6 modelos comparados, vencedor Stacking R$ 1.023 MAE. XAI interativo com SHAP waterfall e calculadora do Ridge meta-learner." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/custom.css" />
+  <link rel="stylesheet" href="css/modelagem.css" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231E3A5F'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Inter,sans-serif' font-size='28' font-weight='800' fill='white'%3EEI%3C/text%3E%3C/svg%3E" />
+
+  <script src="https://cdn.plot.ly/plotly-2.35.0.min.js" defer></script>
 </head>
 <body>
+
+  <!-- ========== HEADER ========== -->
   <header class="site-header">
     <div class="container nav-wrapper">
       <a href="index.html" class="nav-brand"><span class="nav-brand-mark">EI</span><span>ETL IBGE</span></a>
@@ -27,30 +34,336 @@
     </div>
   </header>
 
+  <!-- ========== HERO ========== -->
   <section class="hero">
     <div class="container">
-      <span class="hero-eyebrow">Em construção · Fase 3</span>
-      <h1>Modelagem 100% — XAI do Stacking Ensemble</h1>
+      <span class="hero-eyebrow">XAI · 6 modelos · CV honesta</span>
+      <h1>Como preencher <span class="text-accent">2.324 setores</span> sem comprometer a integridade do dado IBGE.</h1>
       <p class="hero-lead">
-        Esta seção mostrará a comparação dos 6 modelos avaliados, os pesos aprendidos pelo Ridge meta-learner,
-        feature importance via SHAP, partial dependence plots, e waterfall plots de casos exemplares.
-        Vencedor: Stacking com MAE R$ 1.023.
+        Após a cascata de imputação atingir 97,73%, restaram setores legítimos sem renda (parques, militar,
+        indígena, favelas com sigilo). Para atender consumidores que exigem <strong>0% NaN</strong>, avaliamos 6
+        modelos em <strong>cross-validation honesta</strong> e elegemos um vencedor — preservando integridade
+        em <strong>colunas separadas</strong>.
       </p>
-      <div class="hero-ctas">
-        <a href="index.html" class="btn btn-primary">← Voltar ao início</a>
-        <a href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP/blob/main/notebooks/2_analises_diagnostico.ipynb" target="_blank" rel="noopener" class="btn btn-secondary">Ver notebook 2</a>
+      <div class="inline-stats">
+        <div class="inline-stat">
+          <div class="inline-stat-value">6</div>
+          <div class="inline-stat-label">Modelos avaliados</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">🏆</div>
+          <div class="inline-stat-label">Stacking Ridge (vencedor)</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">R$ 1.023</div>
+          <div class="inline-stat-label">MAE no holdout 1.000</div>
+        </div>
+        <div class="inline-stat">
+          <div class="inline-stat-value">100%</div>
+          <div class="inline-stat-label">Cobertura final SP</div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ========== SECTION 1 — OS 6 MODELOS ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="section-eyebrow">Comparação</span>
+      <h2 class="section-title">Os 6 modelos no banco de prova.</h2>
+      <p class="section-lead">
+        Cada modelo foi avaliado com a mesma amostra de 1.000 setores doadores (com renda real), em
+        cross-validation leave-one-out aproximado. As métricas são consistentes entre eles.
+      </p>
+
+      <div class="chart-wrapper">
+        <div id="chart-mae" data-needs-data style="width: 100%; min-height: 380px;"></div>
+      </div>
+
+      <div id="tabela-modelos" data-needs-data></div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 2 — POR QUE STACKING VENCEU ========== -->
+  <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <span class="section-eyebrow">Por que stacking venceu</span>
+      <h2 class="section-title">Os pesos aprendidos pelo Ridge.</h2>
+      <p class="section-lead">
+        Em vez de escolher o melhor modelo individual, o stacking combina os 3 melhores com pesos aprendidos
+        por regressão Ridge. Os modelos se complementam — KNN é bom em casos típicos, HGBR é bom em casos
+        atípicos.
+      </p>
+
+      <div class="chart-row">
+        <div class="chart-wrapper">
+          <div id="chart-ridge" data-needs-data style="width: 100%; min-height: 320px;"></div>
+        </div>
+        <div class="chart-wrapper" style="display: flex; flex-direction: column; justify-content: center;">
+          <h3 style="margin: 0 0 1rem; color: var(--color-primary);">A complementaridade dos modelos</h3>
+          <p id="ridge-interpretacao" style="margin: 0 0 1rem; color: var(--color-text); line-height: 1.65;"></p>
+          <p style="margin: 0; color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.55;">
+            <strong>O ponto chave:</strong> sem o stacking, você teria que escolher 1 modelo. Com ele, o algoritmo
+            decide quanto peso dar a cada um — e os erros se compensam em direções diferentes, baixando o MAE
+            absoluto.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 🎯 SEÇÃO INTERATIVA 1 — SHAP WATERFALL ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="interactive-badge">Interativo</span>
+      <h2 class="section-title">SHAP Waterfall por caso — como o modelo decide.</h2>
+      <p class="section-lead">
+        SHAP decompõe cada predição em <strong>contribuições aditivas</strong> de cada feature.
+        <strong>Selecione um setor abaixo</strong> e veja a decomposição: como o baseline R$ 3.126 vira a
+        predição final, feature por feature.
+      </p>
+
+      <div class="shap-section">
+        <!-- 4 tabs clicáveis pra trocar de caso -->
+        <div id="shap-tabs" class="shap-tabs"></div>
+
+        <!-- Header com info do caso ativo -->
+        <div id="shap-caso-header" class="shap-caso-header"></div>
+
+        <!-- O waterfall em si -->
+        <div class="chart-wrapper" style="margin-top: 0;">
+          <div id="chart-shap-waterfall" style="width: 100%; min-height: 460px;"></div>
+        </div>
+
+        <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;">
+          💡 <strong>Como ler:</strong> cada barra verde adiciona à predição, cada barra vermelha subtrai.
+          O <code>te_bairro</code> (target encoding do bairro) tipicamente domina — quando o bairro tem renda
+          mediana alta, todas as predições partem desse pano de fundo administrativo. Geografia (lat/lon)
+          ajusta para variações intra-bairro.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 🎯 SEÇÃO INTERATIVA 2 — CALCULADORA STACKING ========== -->
+  <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <span class="interactive-badge">Interativo</span>
+      <h2 class="section-title">Calculadora do Stacking — brinque com as predições.</h2>
+      <p class="section-lead">
+        Os valores abaixo vêm do <strong>caso selecionado acima</strong> (clique numa das 4 tabs lá em cima
+        para trocar). <strong>Edite cada predição base</strong> e veja como o stacking final muda em tempo
+        real. Os pesos do Ridge são fixos.
+      </p>
+
+      <div class="calc-grid">
+        <!-- Inputs editáveis -->
+        <div class="calc-inputs">
+          <div class="calc-input-group">
+            <div class="calc-input-label">
+              <span class="calc-input-name">Predição KNN</span>
+              <span class="calc-input-weight">peso 0.530</span>
+            </div>
+            <input
+              type="number"
+              id="calc-knn"
+              class="calc-input"
+              step="100"
+              value="0"
+              placeholder="ex: 2500"
+            />
+            <span class="calc-input-contribution">
+              → contribui com <strong id="contrib-knn">—</strong>
+            </span>
+          </div>
+
+          <div class="calc-input-group">
+            <div class="calc-input-label">
+              <span class="calc-input-name">Predição HistGBR v2</span>
+              <span class="calc-input-weight">peso 0.540</span>
+            </div>
+            <input
+              type="number"
+              id="calc-hgbr"
+              class="calc-input"
+              step="100"
+              value="0"
+              placeholder="ex: 2500"
+            />
+            <span class="calc-input-contribution">
+              → contribui com <strong id="contrib-hgbr">—</strong>
+            </span>
+          </div>
+
+          <div class="calc-input-group">
+            <div class="calc-input-label">
+              <span class="calc-input-name">Predição Cluster v2</span>
+              <span class="calc-input-weight">peso 0.119</span>
+            </div>
+            <input
+              type="number"
+              id="calc-cluster"
+              class="calc-input"
+              step="100"
+              value="0"
+              placeholder="ex: 2500"
+            />
+            <span class="calc-input-contribution">
+              → contribui com <strong id="contrib-cluster">—</strong>
+            </span>
+          </div>
+
+          <div class="calc-bias-line">
+            <span><strong>Bias do Ridge (constante)</strong></span>
+            <span class="calc-bias-value" id="contrib-bias">—</span>
+          </div>
+        </div>
+
+        <!-- Resultado e visualização -->
+        <div>
+          <div class="calc-result">
+            <div class="calc-result-label">Predição Final do Stacking</div>
+            <div class="calc-result-value" id="contrib-total">—</div>
+          </div>
+
+          <div class="chart-wrapper" style="margin-top: 1rem;">
+            <div id="chart-calc-contrib" style="width: 100%; min-height: 280px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-explainer">
+        💡 <strong>Por que essa fórmula importa?</strong> O Ridge aprende, durante o treino, quanto peso dar a cada
+        modelo base de forma a <strong>minimizar o erro médio</strong>. Isso é o que diferencia o stacking de
+        uma média simples — os pesos não são iguais (33% cada). KNN e HGBR têm peso ~50%, Cluster v2 entra com
+        12%. O bias é uma constante que corrige um viés sistemático médio.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 5 — FEATURE IMPORTANCE ========== -->
+  <section class="section">
+    <div class="container">
+      <span class="section-eyebrow">XAI · Importância das features</span>
+      <h2 class="section-title">O que importa pro HistGBR v2.</h2>
+      <p class="section-lead">
+        Permutation importance: embaralha uma feature por vez e mede quanto o erro do modelo aumenta. Quanto
+        mais aumenta, mais importante a feature. <strong>Target encoding do bairro</strong>
+        (laranja) domina — o "pano de fundo administrativo" é o sinal mais forte.
+      </p>
+
+      <div class="chart-wrapper">
+        <div id="chart-features" data-needs-data style="width: 100%; min-height: 420px;"></div>
+      </div>
+
+      <div style="display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; font-size: 0.875rem; color: var(--color-text-muted);">
+        <span><span style="display: inline-block; width: 12px; height: 12px; background: #E67E22; border-radius: 2px; margin-right: 6px; vertical-align: middle;"></span>Target encoding (hierárquico)</span>
+        <span><span style="display: inline-block; width: 12px; height: 12px; background: #1E3A5F; border-radius: 2px; margin-right: 6px; vertical-align: middle;"></span>Espaciais (lat/lon)</span>
+        <span><span style="display: inline-block; width: 12px; height: 12px; background: #95A5A6; border-radius: 2px; margin-right: 6px; vertical-align: middle;"></span>Físicas / atividade</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 6 — CONFIABILIDADE ========== -->
+  <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+    <div class="container">
+      <span class="section-eyebrow">Quando confiar</span>
+      <h2 class="section-title">Confiabilidade da predição por tipo de setor.</h2>
+      <p class="section-lead">
+        XAI honesto: o modelo prediz para qualquer setor que receber, mas a <strong>confiabilidade depende do
+        contexto</strong>. Para setores especiais (parques, militar, indígena, favelas com sigilo), a predição é
+        estatística mas pode ser semanticamente questionável.
+      </p>
+
+      <div id="confianca-grid" data-needs-data class="confianca-grid"></div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 7 — EXPLICAÇÃO DOS PERCENTIS ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <div class="percentil-box">
+        <h3>💡 Como ler os percentis (P50 / P75 / P90)</h3>
+        <p>
+          Quando o stacking tem <code>P90 = 49,70%</code>, <strong>NÃO significa</strong> que o modelo erra
+          ~50% das vezes. Os percentis se leem assim:
+        </p>
+        <ul style="margin: 0 0 0.875rem; padding-left: 1.25rem; color: #1E3A8A; line-height: 1.75;">
+          <li><code>P50 = 17,88%</code> → <strong>metade</strong> das predições erra menos de 18%</li>
+          <li><code>P75 = 30,98%</code> → <strong>75%</strong> erra menos de 31%</li>
+          <li><code>P90 = 49,70%</code> → <strong>90%</strong> erra menos de 50%</li>
+        </ul>
+        <p>
+          Renda tem <strong>distribuição com cauda longa</strong>: alguns setores são intrinsecamente
+          imprevisíveis (heterogeneidade local — condomínios de luxo ao lado de vilas operárias). Esses casos
+          atípicos inflam os percentis altos. <strong>Para a maioria dos casos, o erro é ~18%</strong> — um
+          resultado competitivo com a literatura de predição de renda por setor censitário.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="section-tight">
+    <div class="container">
+      <a href="ivs.html" class="next-cta">
+        <div class="next-cta-text">
+          <strong>Próxima: IVS — Índice de Vulnerabilidade Socioambiental</strong>
+          <span>Síntese dos 4 componentes (renda, densidade, tipo, coabitação) em um único índice 0-100 por setor.</span>
+        </div>
+        <span class="next-cta-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
   <footer class="site-footer">
     <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-brand-mark" style="background: rgba(255,255,255,0.15);">EI</span>
+            <span>ETL IBGE Geofencing CEP</span>
+          </div>
+          <p class="footer-tagline">
+            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE — desenvolvido como parte
+            do Mestrado em Computação Aplicada na Universidade Presbiteriana Mackenzie.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navegação</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="index.html">Início</a></li>
+            <li><a class="footer-link" href="pipeline.html">Pipeline</a></li>
+            <li><a class="footer-link" href="modelagem.html">Modelagem</a></li>
+            <li><a class="footer-link" href="ivs.html">IVS</a></li>
+            <li><a class="footer-link" href="explorar.html">Explorar</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Contato</h4>
+          <ul class="footer-links">
+            <li><a class="footer-link" href="https://github.com/MatPasquali" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="footer-link" href="https://www.linkedin.com/in/matpasquali" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a class="footer-link" href="mailto:matpasqsi@gmail.com">matpasqsi@gmail.com</a></li>
+            <li><a class="footer-link" href="https://github.com/MatPasquali/ETL_IBGE_GEOFENCING_CEP" target="_blank" rel="noopener">Repositório</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider" />
       <div class="footer-bottom">
         <div><strong style="color: white;">Mateus de Pasquali</strong> · 2026</div>
-        <span class="mackenzie-badge">Mackenzie · Mestrado em Computação Aplicada</span>
+        <span class="mackenzie-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          Mackenzie · Mestrado em Computação Aplicada
+        </span>
       </div>
     </div>
   </footer>
+
   <script src="js/nav.js"></script>
+  <script src="js/modelagem.js"></script>
 </body>
 </html>

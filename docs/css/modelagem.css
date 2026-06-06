@@ -1,0 +1,453 @@
+/* Estilos especificos da pagina modelagem.html */
+
+/* === Container generico de chart === */
+.chart-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-top: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+@media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
+
+/* === Tabela de modelos === */
+.modelos-table-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0;
+  margin-top: 2rem;
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+.modelos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.modelos-table th {
+  background: #F9FAFB;
+  text-align: left;
+  padding: 0.875rem 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid var(--color-border);
+}
+.modelos-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+.modelos-table tbody tr:last-child td { border-bottom: 0; }
+.modelos-table tbody tr:hover td { background: #FAFBFC; }
+.modelos-row-winner td {
+  background: linear-gradient(90deg, rgba(230,126,34,0.06) 0%, transparent 100%);
+}
+.modelos-row-winner td:first-child { border-left: 3px solid var(--color-accent); }
+.modelos-row-desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+/* === 🎯 SHAP Waterfall Interativo === */
+.shap-section {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-top: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.shap-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.625rem;
+  margin-bottom: 1.5rem;
+}
+
+.shap-tab {
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text);
+  transition: all 0.15s ease;
+}
+.shap-tab:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.shap-tab.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.08);
+}
+.shap-tab.active .shap-tab-label { color: white; }
+.shap-tab-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.shap-tab-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+/* Header do caso ativo */
+.shap-caso-header {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.shap-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.shap-setor {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  background: rgba(30,58,95,0.06);
+  padding: 0.25rem 0.625rem;
+  border-radius: 4px;
+}
+.shap-localizacao {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.shap-valores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.caso-valor {
+  background: #F9FAFB;
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1rem;
+}
+.caso-valor-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+.caso-valor-num {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+.shap-interpretacao {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin: 0;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* === 🎯 Calculadora Stacking === */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
+
+.calc-inputs {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.calc-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+.calc-input-group:last-of-type { margin-bottom: 0; }
+
+.calc-input-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.calc-input-name {
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+}
+.calc-input-weight {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.calc-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  background: white;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.calc-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.12);
+}
+.calc-input-contribution {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.825rem;
+  color: var(--color-accent);
+  margin-top: 0.25rem;
+}
+
+.calc-result {
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  text-align: center;
+  margin-top: 1.25rem;
+}
+.calc-result-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+.calc-result-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.calc-bias-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+.calc-bias-value {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--color-text);
+}
+
+.calc-explainer {
+  background: rgba(230, 126, 34, 0.08);
+  border-left: 3px solid var(--color-accent);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-sm);
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* === Cards confiabilidade por CD_TIPO === */
+.confianca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.confianca-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-muted);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.confianca-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.confianca-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.confianca-tipo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.confianca-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+}
+.confianca-label {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.confianca-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === Box explicação percentis === */
+.percentil-box {
+  background: linear-gradient(135deg, #E8F4FD 0%, #DBEAFE 100%);
+  border: 1px solid #93C5FD;
+  border-left: 4px solid var(--color-gbm, #3498DB);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 2rem;
+  margin: 3rem 0;
+}
+.percentil-box h3 {
+  color: #1E40AF;
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+.percentil-box p {
+  margin: 0 0 0.875rem;
+  color: #1E3A8A;
+  line-height: 1.65;
+}
+.percentil-box p:last-child { margin-bottom: 0; }
+.percentil-box code {
+  background: rgba(30, 58, 138, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875em;
+  color: #1E40AF;
+}
+
+/* === CTA next page === */
+.next-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 2rem;
+  margin-top: 4rem;
+  text-decoration: none;
+  color: inherit;
+  gap: 1rem;
+  transition: all 0.15s;
+}
+.next-cta:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.next-cta-text strong {
+  display: block;
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  margin-bottom: 0.2rem;
+}
+.next-cta-text span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+.next-cta-arrow {
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-size: 1.5rem;
+}
+
+/* Inline stats (reutiliza pipeline.css se carregado, senao define aqui) */
+.inline-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.inline-stat {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1.125rem;
+}
+.inline-stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.inline-stat-label {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Etiqueta INTERATIVO */
+.interactive-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.875rem;
+}
+.interactive-badge::before {
+  content: '⚡';
+  font-size: 0.85rem;
+}
