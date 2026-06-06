@@ -17,11 +17,11 @@
   const PLOTLY_CONFIG = { displayModeBar: false, responsive: true };
 
   function fmtBRL(v) {
-    if (v === null || v === undefined) return '—';
+    if (v === null || v === undefined) return '-';
     return 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   function fmtPct(v) {
-    if (v === null || v === undefined) return '—';
+    if (v === null || v === undefined) return '-';
     return Number(v).toFixed(2) + '%';
   }
   function colorForModelType(tipo, ehVencedor) {
@@ -33,7 +33,7 @@
   }
 
   // ============================================================
-  // CHART 1 — Bar chart de MAE dos 6 modelos
+  // CHART 1 - Bar chart de MAE dos 6 modelos
   // ============================================================
   function renderMaeChart(modelos, container) {
     const sorted = [...modelos].sort((a, b) => b.mae - a.mae);
@@ -64,7 +64,7 @@
   }
 
   // ============================================================
-  // CHART 2 — Donut dos pesos Ridge
+  // CHART 2 - Donut dos pesos Ridge
   // ============================================================
   function renderRidgeDonut(weights, container) {
     const trace = {
@@ -94,7 +94,7 @@
   }
 
   // ============================================================
-  // CHART 3 — Feature importance
+  // CHART 3 - Feature importance
   // ============================================================
   function renderFeatureImportance(features, container) {
     const sorted = [...features].sort((a, b) => a.valor - b.valor);
@@ -128,7 +128,7 @@
   }
 
   // ============================================================
-  // 🎯 INTERATIVO 1 — SHAP Waterfall por caso
+  // 🎯 INTERATIVO 1 - SHAP Waterfall por caso
   // Usuário seleciona um caso (tabs) → vê waterfall do HGBR pra esse setor
   // ============================================================
   let SHAP_DATA = null;
@@ -221,7 +221,7 @@
       };
 
       const layout = {
-        title: { text: 'Decomposição SHAP — como cada feature empurrou a predição', font: { size: 13, color: '#6B7280' }, x: 0, xanchor: 'left' },
+        title: { text: 'Decomposição SHAP - como cada feature empurrou a predição', font: { size: 13, color: '#6B7280' }, x: 0, xanchor: 'left' },
         font: { family: 'Inter, sans-serif', size: 11.5, color: '#2C3E50' },
         paper_bgcolor: '#FFFFFF', plot_bgcolor: '#FFFFFF',
         margin: { l: 50, r: 30, t: 50, b: 110 },
@@ -238,7 +238,7 @@
   }
 
   // ============================================================
-  // 🎯 INTERATIVO 2 — Calculadora Stacking (lineage interativo)
+  // 🎯 INTERATIVO 2 - Calculadora Stacking (lineage interativo)
   // Usuário ajusta predições KNN/HGBR/Cluster e vê resultado
   // Pré-popula com o caso ativo, mas pode editar
   // ============================================================

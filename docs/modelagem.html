@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modelagem 100% — XAI · ETL IBGE Geofencing CEP</title>
+  <title>Modelagem 100% - XAI · ETL IBGE Geofencing CEP</title>
   <meta name="description" content="6 modelos comparados, vencedor Stacking R$ 1.023 MAE. XAI interativo com SHAP waterfall e calculadora do Ridge meta-learner." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,7 +42,7 @@
       <p class="hero-lead">
         Após a cascata de imputação atingir 97,73%, restaram setores legítimos sem renda (parques, militar,
         indígena, favelas com sigilo). Para atender consumidores que exigem <strong>0% NaN</strong>, avaliamos 6
-        modelos em <strong>cross-validation honesta</strong> e elegemos um vencedor — preservando integridade
+        modelos em <strong>cross-validation honesta</strong> e elegemos um vencedor - preservando integridade
         em <strong>colunas separadas</strong>.
       </p>
       <div class="inline-stats">
@@ -66,7 +66,7 @@
     </div>
   </section>
 
-  <!-- ========== SECTION 1 — OS 6 MODELOS ========== -->
+  <!-- ========== SECTION 1 - OS 6 MODELOS ========== -->
   <section class="section">
     <div class="container">
       <span class="section-eyebrow">Comparação</span>
@@ -84,14 +84,14 @@
     </div>
   </section>
 
-  <!-- ========== SECTION 2 — POR QUE STACKING VENCEU ========== -->
+  <!-- ========== SECTION 2 - POR QUE STACKING VENCEU ========== -->
   <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container">
       <span class="section-eyebrow">Por que stacking venceu</span>
       <h2 class="section-title">Os pesos aprendidos pelo Ridge.</h2>
       <p class="section-lead">
         Em vez de escolher o melhor modelo individual, o stacking combina os 3 melhores com pesos aprendidos
-        por regressão Ridge. Os modelos se complementam — KNN é bom em casos típicos, HGBR é bom em casos
+        por regressão Ridge. Os modelos se complementam - KNN é bom em casos típicos, HGBR é bom em casos
         atípicos.
       </p>
 
@@ -104,7 +104,7 @@
           <p id="ridge-interpretacao" style="margin: 0 0 1rem; color: var(--color-text); line-height: 1.65;"></p>
           <p style="margin: 0; color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.55;">
             <strong>O ponto chave:</strong> sem o stacking, você teria que escolher 1 modelo. Com ele, o algoritmo
-            decide quanto peso dar a cada um — e os erros se compensam em direções diferentes, baixando o MAE
+            decide quanto peso dar a cada um - e os erros se compensam em direções diferentes, baixando o MAE
             absoluto.
           </p>
         </div>
@@ -112,11 +112,11 @@
     </div>
   </section>
 
-  <!-- ========== 🎯 SEÇÃO INTERATIVA 1 — SHAP WATERFALL ========== -->
+  <!-- ========== 🎯 SEÇÃO INTERATIVA 1 - SHAP WATERFALL ========== -->
   <section class="section">
     <div class="container">
       <span class="interactive-badge">Interativo</span>
-      <h2 class="section-title">SHAP Waterfall por caso — como o modelo decide.</h2>
+      <h2 class="section-title">SHAP Waterfall por caso - como o modelo decide.</h2>
       <p class="section-lead">
         SHAP decompõe cada predição em <strong>contribuições aditivas</strong> de cada feature.
         <strong>Selecione um setor abaixo</strong> e veja a decomposição: como o baseline R$ 3.126 vira a
@@ -137,7 +137,7 @@
 
         <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;">
           💡 <strong>Como ler:</strong> cada barra verde adiciona à predição, cada barra vermelha subtrai.
-          O <code>te_bairro</code> (target encoding do bairro) tipicamente domina — quando o bairro tem renda
+          O <code>te_bairro</code> (target encoding do bairro) tipicamente domina - quando o bairro tem renda
           mediana alta, todas as predições partem desse pano de fundo administrativo. Geografia (lat/lon)
           ajusta para variações intra-bairro.
         </p>
@@ -145,11 +145,11 @@
     </div>
   </section>
 
-  <!-- ========== 🎯 SEÇÃO INTERATIVA 2 — CALCULADORA STACKING ========== -->
+  <!-- ========== 🎯 SEÇÃO INTERATIVA 2 - CALCULADORA STACKING ========== -->
   <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container">
       <span class="interactive-badge">Interativo</span>
-      <h2 class="section-title">Calculadora do Stacking — brinque com as predições.</h2>
+      <h2 class="section-title">Calculadora do Stacking - brinque com as predições.</h2>
       <p class="section-lead">
         Os valores abaixo vêm do <strong>caso selecionado acima</strong> (clique numa das 4 tabs lá em cima
         para trocar). <strong>Edite cada predição base</strong> e veja como o stacking final muda em tempo
@@ -173,7 +173,7 @@
               placeholder="ex: 2500"
             />
             <span class="calc-input-contribution">
-              → contribui com <strong id="contrib-knn">—</strong>
+              → contribui com <strong id="contrib-knn">-</strong>
             </span>
           </div>
 
@@ -191,7 +191,7 @@
               placeholder="ex: 2500"
             />
             <span class="calc-input-contribution">
-              → contribui com <strong id="contrib-hgbr">—</strong>
+              → contribui com <strong id="contrib-hgbr">-</strong>
             </span>
           </div>
 
@@ -209,13 +209,13 @@
               placeholder="ex: 2500"
             />
             <span class="calc-input-contribution">
-              → contribui com <strong id="contrib-cluster">—</strong>
+              → contribui com <strong id="contrib-cluster">-</strong>
             </span>
           </div>
 
           <div class="calc-bias-line">
             <span><strong>Bias do Ridge (constante)</strong></span>
-            <span class="calc-bias-value" id="contrib-bias">—</span>
+            <span class="calc-bias-value" id="contrib-bias">-</span>
           </div>
         </div>
 
@@ -223,7 +223,7 @@
         <div>
           <div class="calc-result">
             <div class="calc-result-label">Predição Final do Stacking</div>
-            <div class="calc-result-value" id="contrib-total">—</div>
+            <div class="calc-result-value" id="contrib-total">-</div>
           </div>
 
           <div class="chart-wrapper" style="margin-top: 1rem;">
@@ -235,13 +235,13 @@
       <div class="calc-explainer">
         💡 <strong>Por que essa fórmula importa?</strong> O Ridge aprende, durante o treino, quanto peso dar a cada
         modelo base de forma a <strong>minimizar o erro médio</strong>. Isso é o que diferencia o stacking de
-        uma média simples — os pesos não são iguais (33% cada). KNN e HGBR têm peso ~50%, Cluster v2 entra com
+        uma média simples - os pesos não são iguais (33% cada). KNN e HGBR têm peso ~50%, Cluster v2 entra com
         12%. O bias é uma constante que corrige um viés sistemático médio.
       </div>
     </div>
   </section>
 
-  <!-- ========== SECTION 5 — FEATURE IMPORTANCE ========== -->
+  <!-- ========== SECTION 5 - FEATURE IMPORTANCE ========== -->
   <section class="section">
     <div class="container">
       <span class="section-eyebrow">XAI · Importância das features</span>
@@ -249,7 +249,7 @@
       <p class="section-lead">
         Permutation importance: embaralha uma feature por vez e mede quanto o erro do modelo aumenta. Quanto
         mais aumenta, mais importante a feature. <strong>Target encoding do bairro</strong>
-        (laranja) domina — o "pano de fundo administrativo" é o sinal mais forte.
+        (laranja) domina - o "pano de fundo administrativo" é o sinal mais forte.
       </p>
 
       <div class="chart-wrapper">
@@ -264,7 +264,7 @@
     </div>
   </section>
 
-  <!-- ========== SECTION 6 — CONFIABILIDADE ========== -->
+  <!-- ========== SECTION 6 - CONFIABILIDADE ========== -->
   <section class="section" style="background: var(--color-bg-card); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
     <div class="container">
       <span class="section-eyebrow">Quando confiar</span>
@@ -279,7 +279,7 @@
     </div>
   </section>
 
-  <!-- ========== SECTION 7 — EXPLICAÇÃO DOS PERCENTIS ========== -->
+  <!-- ========== SECTION 7 - EXPLICAÇÃO DOS PERCENTIS ========== -->
   <section class="section-tight">
     <div class="container">
       <div class="percentil-box">
@@ -295,8 +295,8 @@
         </ul>
         <p>
           Renda tem <strong>distribuição com cauda longa</strong>: alguns setores são intrinsecamente
-          imprevisíveis (heterogeneidade local — condomínios de luxo ao lado de vilas operárias). Esses casos
-          atípicos inflam os percentis altos. <strong>Para a maioria dos casos, o erro é ~18%</strong> — um
+          imprevisíveis (heterogeneidade local - condomínios de luxo ao lado de vilas operárias). Esses casos
+          atípicos inflam os percentis altos. <strong>Para a maioria dos casos, o erro é ~18%</strong> - um
           resultado competitivo com a literatura de predição de renda por setor censitário.
         </p>
       </div>
@@ -308,7 +308,7 @@
     <div class="container">
       <a href="ivs.html" class="next-cta">
         <div class="next-cta-text">
-          <strong>Próxima: IVS — Índice de Vulnerabilidade Socioambiental</strong>
+          <strong>Próxima: IVS - Índice de Vulnerabilidade Socioambiental</strong>
           <span>Síntese dos 4 componentes (renda, densidade, tipo, coabitação) em um único índice 0-100 por setor.</span>
         </div>
         <span class="next-cta-arrow" aria-hidden="true">→</span>
@@ -326,7 +326,7 @@
             <span>ETL IBGE Geofencing CEP</span>
           </div>
           <p class="footer-tagline">
-            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE — desenvolvido como parte
+            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE - desenvolvido como parte
             do Mestrado em Computação Aplicada na Universidade Presbiteriana Mackenzie.
           </p>
         </div>

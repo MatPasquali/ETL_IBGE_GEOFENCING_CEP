@@ -27,11 +27,11 @@
   }
 
   function fmtBRL(v) {
-    if (v === null || v === undefined) return '—';
+    if (v === null || v === undefined) return '-';
     return 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   function fmtInt(v) {
-    if (v === null || v === undefined) return '—';
+    if (v === null || v === undefined) return '-';
     return Number(v).toLocaleString('pt-BR');
   }
 
@@ -113,7 +113,7 @@
       </div>
       <div class="popup-row">
         <span class="popup-label">Classe</span>
-        <span class="popup-value">${classForIvs(p.ivs_medio) || '—'}</span>
+        <span class="popup-value">${classForIvs(p.ivs_medio) || '-'}</span>
       </div>
       <div class="popup-row">
         <span class="popup-label">Renda mediana</span>
@@ -121,7 +121,7 @@
       </div>
       <div class="popup-row">
         <span class="popup-label">Coabitação mediana</span>
-        <span class="popup-value">${p.coabitacao_mediana ? Number(p.coabitacao_mediana).toFixed(2) + ' mor/dom' : '—'}</span>
+        <span class="popup-value">${p.coabitacao_mediana ? Number(p.coabitacao_mediana).toFixed(2) + ' mor/dom' : '-'}</span>
       </div>
       <div class="popup-row">
         <span class="popup-label">Setores</span>
@@ -239,7 +239,7 @@
   function renderValidacao(metricas) {
     const setCorrel = (id, val) => {
       const el = document.getElementById(id);
-      if (el) el.textContent = val !== undefined && val !== null ? val.toFixed(3) : '—';
+      if (el) el.textContent = val !== undefined && val !== null ? val.toFixed(3) : '-';
     };
     setCorrel('correl-renda',     metricas.correlacao_ivs_renda);
     setCorrel('correl-densidade', metricas.correlacao_ivs_densidade);

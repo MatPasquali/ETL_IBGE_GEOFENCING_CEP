@@ -67,7 +67,7 @@
     "hgbr_v2": 0.540,
     "cluster_v2": 0.119,
     "bias": -381.67,
-    "interpretacao": "KNN e HistGBR têm peso quase igual (~50% cada) — são complementares. KNN ganha em P50 (casos típicos), HistGBR ganha em P90 (casos atípicos). Cluster v2 entra com peso baixo (12%) — coadjuvante."
+    "interpretacao": "KNN e HistGBR têm peso quase igual (~50% cada) - são complementares. KNN ganha em P50 (casos típicos), HistGBR ganha em P90 (casos atípicos). Cluster v2 entra com peso baixo (12%) - coadjuvante."
   },
 
   "feature_importance": [
@@ -95,7 +95,7 @@
     },
     {
       "tipo": "4", "label": "Equipamentos públicos / parques", "nivel": "conceitual",
-      "explicacao": "Setor sem moradores — renda predita é estatística mas semanticamente questionável."
+      "explicacao": "Setor sem moradores - renda predita é estatística mas semanticamente questionável."
     },
     {
       "tipo": "6", "label": "Aglomerado subnormal (favela)", "nivel": "baixa",
@@ -137,7 +137,7 @@
       "hgbr_pred": 2493.34,
       "cluster_pred": 2710.00,
       "stack_pred": 2547.20,
-      "interpretacao": "Caso típico — KNN encontra vizinhos similares, HGBR confirma padrão do bairro. As features de target encoding empurram suavemente em direção da renda do bairro.",
+      "interpretacao": "Caso típico - KNN encontra vizinhos similares, HGBR confirma padrão do bairro. As features de target encoding empurram suavemente em direção da renda do bairro.",
       "shap_values": [
         { "feature": "te_bairro",            "value": 0.062, "feature_value": 2620.0 },
         { "feature": "te_subdistrito",       "value": 0.045, "feature_value": 2580.0 },
@@ -195,7 +195,7 @@
       "hgbr_pred": 1979.27,
       "cluster_pred": 1830.00,
       "stack_pred": 2025.60,
-      "interpretacao": "Caso difícil — bairro heterogêneo puxa a predição pra média. Aparece na cauda do erro (P90). O modelo não tem como saber que esse setor específico é mais pobre que a média do bairro.",
+      "interpretacao": "Caso difícil - bairro heterogêneo puxa a predição pra média. Aparece na cauda do erro (P90). O modelo não tem como saber que esse setor específico é mais pobre que a média do bairro.",
       "shap_values": [
         { "feature": "te_bairro",            "value": -0.42, "feature_value": 1850.0 },
         { "feature": "te_subdistrito",       "value": -0.18, "feature_value": 2200.0 },
@@ -224,7 +224,7 @@
       "hgbr_pred": 5490.76,
       "cluster_pred": 2681.92,
       "stack_pred": 4928.40,
-      "interpretacao": "Setor sem ground truth — parque não tem moradores. A predição é um proxy estatístico do bairro do parque (R$ 5.490). Está no flag predicao_stack — uso com cautela.",
+      "interpretacao": "Setor sem ground truth - parque não tem moradores. A predição é um proxy estatístico do bairro do parque (R$ 5.490). Está no flag predicao_stack - uso com cautela.",
       "shap_values": [
         { "feature": "te_bairro",            "value": 0.42,  "feature_value": 5800.0 },
         { "feature": "te_subdistrito",       "value": 0.28,  "feature_value": 4900.0 },

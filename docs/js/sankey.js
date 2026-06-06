@@ -111,7 +111,7 @@
       return;
     }
 
-    // Sankey 1 — Geofencing
+    // Sankey 1 - Geofencing
     const geoEl = document.getElementById('sankey-geofencing');
     if (geoEl && window.Plotly) {
       Plotly.newPlot(
@@ -122,7 +122,7 @@
       );
     }
 
-    // Sankey 2 — Cobertura de renda
+    // Sankey 2 - Cobertura de renda
     const covEl = document.getElementById('sankey-cobertura');
     if (covEl && window.Plotly) {
       Plotly.newPlot(

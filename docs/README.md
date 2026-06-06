@@ -1,4 +1,4 @@
-# Site MVP — Portfolio ETL IBGE Geofencing CEP
+# Site MVP - Portfolio ETL IBGE Geofencing CEP
 
 Site estático hospedado via GitHub Pages para apresentação do projeto.
 
@@ -36,7 +36,7 @@ docs/
 ├── index.html              ← Landing
 ├── pipeline.html           ← Sankey + 8 etapas do pipeline
 ├── modelagem.html          ← XAI interativo (SHAP waterfall + calculadora stacking)
-├── ivs.html                ← IVS — mapa Leaflet de 645 municípios SP
+├── ivs.html                ← IVS - mapa Leaflet de 645 municípios SP
 ├── explorar.html           ← Busca interativa em 27k setores SP-capital
 ├── .nojekyll
 ├── css/
@@ -92,5 +92,5 @@ docs/
 ## Autor
 
 **Mateus de Pasquali**
-Mestrado em Computação Aplicada — Universidade Presbiteriana Mackenzie
+Mestrado em Computação Aplicada - Universidade Presbiteriana Mackenzie
 [GitHub](https://github.com/MatPasquali) · [LinkedIn](https://www.linkedin.com/in/mateuspasquali/) · [matpasqsi@gmail.com](mailto:matpasqsi@gmail.com)

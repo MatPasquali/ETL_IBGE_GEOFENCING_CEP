@@ -48,7 +48,7 @@
       <h1>De <span class="text-accent">22,9 milhões de endereços</span> a <span class="text-accent">102.599 setores com CEP</span>.</h1>
       <p class="hero-lead">
         O CNEFE traz cada endereço com o código de setor que ele "diz" pertencer, mas esses códigos
-        frequentemente referem-se a versões antigas da malha territorial — em SP, 7% dos endereços ficam órfãos.
+        frequentemente referem-se a versões antigas da malha territorial - em SP, 7% dos endereços ficam órfãos.
         A solução: <strong>ignorar o código informado</strong> e atribuir cada endereço ao setor pela
         <strong>geometria</strong>, via point-in-polygon contra o shapefile CD2022.
       </p>
@@ -73,14 +73,14 @@
     </div>
   </section>
 
-  <!-- ========== SANKEY 1 — GEOFENCING ========== -->
+  <!-- ========== SANKEY 1 - GEOFENCING ========== -->
   <section class="section">
     <div class="container">
       <span class="section-eyebrow">Fluxo do geofencing</span>
       <h2 class="section-title">Como cada setor ganha seu CEP.</h2>
       <p class="section-lead">
         Cascata híbrida em 3 caminhos: <strong>geofencing</strong> (caso saudável), <strong>cnefe_original</strong>
-        (fallback para micro-setores em borda — mediana de 3.600 m²), e <strong>sem_endereco_cnefe</strong>
+        (fallback para micro-setores em borda - mediana de 3.600 m²), e <strong>sem_endereco_cnefe</strong>
         (parques, áreas industriais sem domicílios).
       </p>
       <div class="sankey-wrapper">
@@ -104,11 +104,11 @@
     </div>
   </section>
 
-  <!-- ========== SANKEY 2 — COBERTURA DE RENDA ========== -->
+  <!-- ========== SANKEY 2 - COBERTURA DE RENDA ========== -->
   <section class="section">
     <div class="container">
       <span class="section-eyebrow">Fluxo da cobertura de renda</span>
-      <h2 class="section-title">Do dado original aos 100% — com integridade preservada.</h2>
+      <h2 class="section-title">Do dado original aos 100% - com integridade preservada.</h2>
       <p class="section-lead">
         A cascata respeita a hierarquia do dado: dado IBGE primeiro, depois imputação por vizinhos administrativos
         cada vez mais amplos, e por último predição via stacking ensemble. Cada categoria vira flag explícito em
@@ -131,7 +131,7 @@
         <div class="bug-box-content">
           <p>
             A função <code>parse_br_number</code> original assumia formato brasileiro
-            (<code>'1.560,08'</code> — ponto como milhar, vírgula como decimal). Funcionava perfeitamente
+            (<code>'1.560,08'</code> - ponto como milhar, vírgula como decimal). Funcionava perfeitamente
             quando o input vinha do CSV. Mas quando o pipeline passou a ler o <strong>XLSX</strong> do IBGE,
             que armazena números nativamente como float en-US (<code>'1560.08'</code>),
             a função silenciosamente <strong>multiplicava V06003, V06004 e V06005 por 100</strong>.
@@ -139,18 +139,18 @@
 
           <div class="bug-box-diff">
             <div class="bug-diff-block">
-              <span class="bug-diff-label before">❌ Antes — setor Tremembé/SP</span>
+              <span class="bug-diff-label before">❌ Antes - setor Tremembé/SP</span>
               <div class="bug-diff-value">V06004 = R$ 156.008,00</div>
             </div>
             <div class="bug-diff-block">
-              <span class="bug-diff-label after">✅ Depois — setor Tremembé/SP</span>
+              <span class="bug-diff-label after">✅ Depois - setor Tremembé/SP</span>
               <div class="bug-diff-value">V06004 = R$ 1.560,08</div>
             </div>
           </div>
 
           <p>
             <strong>Como detectamos:</strong> o mapa interativo mostrou rendas absurdas em bairros residenciais
-            comuns. A mediana V06006, por ser inteira no XLSX, escapava do bug — e essa inconsistência
+            comuns. A mediana V06006, por ser inteira no XLSX, escapava do bug - e essa inconsistência
             denunciou o problema. Validamos confrontando com o XLSX original.
           </p>
 
@@ -169,7 +169,7 @@
     <div class="container">
       <a href="modelagem.html" class="next-cta">
         <div class="next-cta-text">
-          <strong>Próxima: Modelagem 100% — XAI do Stacking Ensemble</strong>
+          <strong>Próxima: Modelagem 100% - XAI do Stacking Ensemble</strong>
           <span>6 modelos comparados, vencedor com MAE R$ 1.023, pesos Ridge interpretáveis e SHAP values.</span>
         </div>
         <span class="next-cta-arrow" aria-hidden="true">→</span>
@@ -187,7 +187,7 @@
             <span>ETL IBGE Geofencing CEP</span>
           </div>
           <p class="footer-tagline">
-            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE — desenvolvido como parte
+            Pipeline de Engenharia de Dados aplicado a dados públicos do IBGE - desenvolvido como parte
             do Mestrado em Computação Aplicada na Universidade Presbiteriana Mackenzie.
           </p>
         </div>

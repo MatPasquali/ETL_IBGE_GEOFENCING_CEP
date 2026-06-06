@@ -56,11 +56,11 @@
   };
 
   function fmtBRL(v) {
-    if (v === null || v === undefined) return '—';
+    if (v === null || v === undefined) return '-';
     return 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   function fmtInt(v) {
-    if (v === null || v === undefined) return '—';
+    if (v === null || v === undefined) return '-';
     return Number(v).toLocaleString('pt-BR');
   }
 
@@ -153,7 +153,7 @@
           <p class="result-distrito">${s.dt || 'Distrito não disponível'}</p>
         </div>
         <div class="result-ivs">
-          <div class="result-ivs-value">${s.iv !== null ? Number(s.iv).toFixed(1) : '—'}</div>
+          <div class="result-ivs-value">${s.iv !== null ? Number(s.iv).toFixed(1) : '-'}</div>
           <span class="result-classe classe-${s.cv || ''}">${s.cv || ''}</span>
         </div>
       </div>
@@ -189,9 +189,9 @@
     const card = document.getElementById('setor-card');
     if (!card) return;
 
-    const origem = ORIGEM_RENDA_LABELS[setor.or] || { label: setor.or || '—', cor: '#6B7280', icone: '?' };
-    const origemCep = ORIGEM_CEP_LABELS[setor.oc] || { label: setor.oc || '—', cor: '#6B7280', icone: '?' };
-    const classeInfo = CLASSE_LABELS[setor.cv] || { label: '—', cor: '#6B7280' };
+    const origem = ORIGEM_RENDA_LABELS[setor.or] || { label: setor.or || '-', cor: '#6B7280', icone: '?' };
+    const origemCep = ORIGEM_CEP_LABELS[setor.oc] || { label: setor.oc || '-', cor: '#6B7280', icone: '?' };
+    const classeInfo = CLASSE_LABELS[setor.cv] || { label: '-', cor: '#6B7280' };
     const tipoLabel = CD_TIPO_LABELS[setor.tp] || `Tipo ${setor.tp}`;
 
     const rendaClass = (setor.or && setor.or.startsWith('predicao'))
@@ -224,10 +224,10 @@
       <div class="card-section">
         <h3 class="card-section-title">Vulnerabilidade Socioambiental</h3>
         <div class="ivs-display">
-          <div class="ivs-gauge" style="background: ${classeInfo.cor};">${setor.iv !== null ? Number(setor.iv).toFixed(0) : '—'}</div>
+          <div class="ivs-gauge" style="background: ${classeInfo.cor};">${setor.iv !== null ? Number(setor.iv).toFixed(0) : '-'}</div>
           <div class="ivs-meta">
             <div class="ivs-class" style="color: ${classeInfo.cor};">${classeInfo.label}</div>
-            <div class="ivs-rank">IVS = ${setor.iv !== null ? Number(setor.iv).toFixed(2) : '—'} / 100 · Posição #${fmtInt(setor.rk)} em SP-capital</div>
+            <div class="ivs-rank">IVS = ${setor.iv !== null ? Number(setor.iv).toFixed(2) : '-'} / 100 · Posição #${fmtInt(setor.rk)} em SP-capital</div>
           </div>
         </div>
 
@@ -239,7 +239,7 @@
           </div>
           <div class="card-stat">
             <div class="card-stat-label">Coabitação</div>
-            <div class="card-stat-value">${setor.cb !== null ? Number(setor.cb).toFixed(2) : '—'}</div>
+            <div class="card-stat-value">${setor.cb !== null ? Number(setor.cb).toFixed(2) : '-'}</div>
             <div class="card-stat-sub">moradores/domicílio</div>
           </div>
         </div>
@@ -328,7 +328,7 @@
         iconAnchor: [12, 12],
       })
     })
-    .bindPopup(`<b>${setor.id}</b><br>${setor.dt || ''}<br>IVS: ${setor.iv !== null ? setor.iv.toFixed(2) : '—'}`)
+    .bindPopup(`<b>${setor.id}</b><br>${setor.dt || ''}<br>IVS: ${setor.iv !== null ? setor.iv.toFixed(2) : '-'}`)
     .addTo(MINI_MAP_INSTANCE);
   }
 

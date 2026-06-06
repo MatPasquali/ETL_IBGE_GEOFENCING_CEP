@@ -1,6 +1,6 @@
 {
   "geofencing": {
-    "title": "Fluxo do geofencing — de endereços a setores com CEP",
+    "title": "Fluxo do geofencing - de endereços a setores com CEP",
     "subtitle": "22,9 milhões de endereços do CNEFE atribuídos a setores via point-in-polygon, com fallback híbrido para micro-setores de borda.",
     "nodes": [
       { "label": "102.599 setores no shapefile CD2022 SP", "color": "#1E3A5F" },
@@ -21,7 +21,7 @@
   },
 
   "cobertura_renda": {
-    "title": "Fluxo da cobertura de renda — do dado original aos 100%",
+    "title": "Fluxo da cobertura de renda - do dado original aos 100%",
     "subtitle": "Cascata original → imputação → predição preserva integridade do dado IBGE em coluna separada.",
     "nodes": [
       { "label": "102.599 setores SP", "color": "#1E3A5F" },
@@ -52,7 +52,7 @@
   "etapas": [
     {
       "n": 1, "titulo": "Renda como driver", "icon": "💰",
-      "descricao": "Lê o XLSX do IBGE (Agregados de Renda) e classifica cada setor em <code>numerica</code>, <code>sigilo</code> (X) ou <code>ausente</code>. Renda é o driver — não o CNEFE.",
+      "descricao": "Lê o XLSX do IBGE (Agregados de Renda) e classifica cada setor em <code>numerica</code>, <code>sigilo</code> (X) ou <code>ausente</code>. Renda é o driver - não o CNEFE.",
       "tech": "pandas + openpyxl"
     },
     {
